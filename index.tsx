@@ -4,18 +4,27 @@ import { createCliRenderer } from '@opentui/core'
 import { createRoot } from '@opentui/react'
 import { App } from './src/App'
 
-async function main() {
-  const cwd = process.cwd()
-  
-  const renderer = await createCliRenderer({ 
-    exitOnCtrlC: false,
-  })
-  
-  const root = createRoot(renderer)
-  root.render(<App cwd={cwd} />)
+// Create the CLI renderer (async)
+const renderer = await createCliRenderer({
+  exitOnCtrlC: false, // We handle Ctrl+C in the app
+  useAlternateScreen: true, // Enable fullscreen mode with alternate buffer
+})
+
+// Create and mount the React root
+const cwd = process.cwd()
+const root = createRoot(renderer)
+root.render(<App cwd={cwd} />)
+
+// Clean exit handler
+const cleanExit = () => {
+  root.unmount()
+  renderer.destroy()
+  process.exit(0)
 }
 
-main().catch((error) => {
-  console.error('Error starting GitArbor:', error)
-  process.exit(1)
-})
+// Handle cleanup on exit signals
+process.on('SIGINT', cleanExit)
+process.on('SIGTERM', cleanExit)
+
+// Export cleanExit for use in App component
+;(globalThis as any).__gitarborCleanExit = cleanExit
