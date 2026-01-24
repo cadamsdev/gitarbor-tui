@@ -9,7 +9,10 @@ import { BranchesView } from './components/BranchesView'
 import { DiffView } from './components/DiffView'
 import { CommitModal } from './components/CommitModal'
 import { ExitModal } from './components/ExitModal'
+import { CommandPalette } from './components/CommandPalette'
+import { SettingsModal } from './components/SettingsModal'
 import type { GitStatus, GitCommit, GitBranch, View } from './types/git'
+import type { Command } from './types/commands'
 
 export function App({ cwd }: { cwd: string }) {
   const renderer = useRenderer()
@@ -30,6 +33,8 @@ export function App({ cwd }: { cwd: string }) {
   const [message, setMessage] = useState('')
   const [showCommitModal, setShowCommitModal] = useState(false)
   const [showExitModal, setShowExitModal] = useState(false)
+  const [showCommandPalette, setShowCommandPalette] = useState(false)
+  const [showSettingsModal, setShowSettingsModal] = useState(false)
   const [loading, setLoading] = useState(false)
 
   // Clean exit handler
@@ -147,9 +152,83 @@ export function App({ cwd }: { cwd: string }) {
     }
   }, [view, status, commits, branches])
 
+  // Define available commands
+  const commands: Command[] = [
+    {
+      id: 'open-settings',
+      label: 'Open Settings',
+      description: 'Configure git global user name and email',
+      shortcut: ',',
+      execute: () => setShowSettingsModal(true),
+    },
+    {
+      id: 'view-status',
+      label: 'View: Status',
+      description: 'Show git status with staged/unstaged files',
+      shortcut: '1',
+      execute: () => {
+        setView('status')
+        setSelectedIndex(0)
+      },
+    },
+    {
+      id: 'view-log',
+      label: 'View: Log',
+      description: 'Show commit history',
+      shortcut: '2',
+      execute: () => {
+        setView('log')
+        setSelectedIndex(0)
+      },
+    },
+    {
+      id: 'view-branches',
+      label: 'View: Branches',
+      description: 'Show local and remote branches',
+      shortcut: '3',
+      execute: () => {
+        setView('branches')
+        setSelectedIndex(0)
+      },
+    },
+    {
+      id: 'view-diff',
+      label: 'View: Diff',
+      description: 'Show file differences',
+      shortcut: '4',
+      execute: () => setView('diff'),
+    },
+    {
+      id: 'commit',
+      label: 'Commit Changes',
+      description: 'Create a new commit with staged files',
+      shortcut: 'c',
+      execute: () => {
+        if (status.staged.length > 0) {
+          setShowCommitModal(true)
+        } else {
+          setMessage('No staged files to commit')
+        }
+      },
+    },
+    {
+      id: 'refresh',
+      label: 'Refresh Data',
+      description: 'Reload git status and data',
+      execute: () => void loadData(),
+    },
+    {
+      id: 'exit',
+      label: 'Exit',
+      description: 'Exit the application',
+      shortcut: 'q / ESC',
+      execute: () => setShowExitModal(true),
+    },
+  ]
+
   useKeyboard((key) => {
-    if (showExitModal) {
-      // Exit modal handles its own keyboard input
+    if (showExitModal || showCommandPalette || showSettingsModal) {
+      // Modals handle their own keyboard input
       return
     }
 
@@ -157,6 +236,18 @@ export function App({ cwd }: { cwd: string }) {
       if (key.name === 'escape') {
         setShowCommitModal(false)
       }
+      return
+    }
+
+    // Command palette with '/' key
+    if (key.sequence === '/') {
+      setShowCommandPalette(true)
+      return
+    }
+
+    // Settings with ',' key
+    if (key.sequence === ',') {
+      setShowSettingsModal(true)
       return
     }
 
@@ -295,6 +386,17 @@ export function App({ cwd }: { cwd: string }) {
           onConfirm={handleExit}
           onCancel={() => setShowExitModal(false)}
         />
+      )}
+
+      {showCommandPalette && (
+        <CommandPalette
+          commands={commands}
+          onClose={() => setShowCommandPalette(false)}
+        />
+      )}
+
+      {showSettingsModal && (
+        <SettingsModal onClose={() => setShowSettingsModal(false)} />
       )}
     </box>
   )
