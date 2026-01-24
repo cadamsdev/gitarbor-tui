@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useKeyboard } from '@opentui/react'
+import { useKeyboard, useRenderer } from '@opentui/react'
 import { GitClient } from './utils/git'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
@@ -12,6 +12,7 @@ import { ExitModal } from './components/ExitModal'
 import type { GitStatus, GitCommit, GitBranch, View } from './types/git'
 
 export function App({ cwd }: { cwd: string }) {
+  const renderer = useRenderer()
   const [git] = useState(() => new GitClient(cwd))
   const [view, setView] = useState<View>('status')
   const [status, setStatus] = useState<GitStatus>({
@@ -30,6 +31,18 @@ export function App({ cwd }: { cwd: string }) {
   const [showCommitModal, setShowCommitModal] = useState(false)
   const [showExitModal, setShowExitModal] = useState(false)
   const [loading, setLoading] = useState(false)
+
+  // Clean exit handler
+  const handleExit = useCallback(() => {
+    const cleanExit = (globalThis as any).__gitarborCleanExit
+    if (cleanExit) {
+      cleanExit()
+    } else {
+      // Fallback if global not available
+      renderer.destroy()
+      process.exit(0)
+    }
+  }, [renderer])
 
   const loadData = useCallback(async () => {
     try {
@@ -279,7 +292,7 @@ export function App({ cwd }: { cwd: string }) {
 
       {showExitModal && (
         <ExitModal
-          onConfirm={() => process.exit(0)}
+          onConfirm={handleExit}
           onCancel={() => setShowExitModal(false)}
         />
       )}
