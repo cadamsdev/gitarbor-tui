@@ -11,10 +11,13 @@ export function CommandPalette({ commands, onClose }: CommandPaletteProps) {
   const [search, setSearch] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
 
-  const filteredCommands = commands.filter((cmd) =>
-    cmd.label.toLowerCase().includes(search.toLowerCase()) ||
-    cmd.description.toLowerCase().includes(search.toLowerCase())
-  )
+  // Only show commands if there's a search query
+  const filteredCommands = search.trim().length > 0
+    ? commands.filter((cmd) =>
+        cmd.label.toLowerCase().includes(search.toLowerCase()) ||
+        cmd.description.toLowerCase().includes(search.toLowerCase())
+      )
+    : []
 
   useKeyboard((key) => {
     if (key.name === 'escape') {
@@ -55,7 +58,7 @@ export function CommandPalette({ commands, onClose }: CommandPaletteProps) {
         <box marginBottom={1}>
           <input
             value={search}
-            onChange={setSearch}
+            onInput={setSearch}
             placeholder="Type to search commands..."
             focused={true}
             width={76}
@@ -67,7 +70,9 @@ export function CommandPalette({ commands, onClose }: CommandPaletteProps) {
           flexGrow={1}
           style={{ overflow: 'hidden' }}
         >
-          {filteredCommands.length === 0 ? (
+          {search.trim().length === 0 ? (
+            <text fg="#999999">Type to search for commands...</text>
+          ) : filteredCommands.length === 0 ? (
             <text fg="#999999">No commands found</text>
           ) : (
             filteredCommands.slice(0, 10).map((cmd, index) => (

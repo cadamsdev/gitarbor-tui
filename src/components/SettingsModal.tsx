@@ -142,7 +142,7 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
           {editMode && selectedField === 'name' ? (
             <input
               value={editValue}
-              onChange={setEditValue}
+              onInput={setEditValue}
               onSubmit={handleSave}
               focused={true}
               width={50}
@@ -163,7 +163,7 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
           {editMode && selectedField === 'email' ? (
             <input
               value={editValue}
-              onChange={setEditValue}
+              onInput={setEditValue}
               onSubmit={handleSave}
               focused={true}
               width={50}
