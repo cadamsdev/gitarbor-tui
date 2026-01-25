@@ -1,10 +1,67 @@
 import { theme } from '../theme'
+import type { View } from '../types/git'
 
 interface FooterProps {
   message: string
+  view: View
+  focusedPanel?: 'status' | 'branches' | 'log'
+  hasStaged?: boolean
+  hasUnstaged?: boolean
+  hasUntracked?: boolean
+  hasStashes?: boolean
+  mergeInProgress?: boolean
 }
 
-export function Footer({ message }: FooterProps) {
+export function Footer({ 
+  message, 
+  view, 
+  focusedPanel,
+  hasStaged = false,
+  hasUnstaged = false,
+  hasUntracked = false,
+  hasStashes = false,
+  mergeInProgress = false,
+}: FooterProps) {
+  const getContextualCommands = (): { line1: string; line2: string } => {
+    // Global commands that are always available
+    const globalCommands = '[/] Palette | [,] Settings | [P] Push | [p] Pull | [f] Fetch'
+    
+    // View-specific and context-specific commands
+    if (view === 'main' && focusedPanel === 'status') {
+      const line1 = `${globalCommands} | [c] Commit | [s] Stash`
+      const line2 = '[SPACE] Stage/Unstage | [a] Stage All | [A] Unstage All | [d] Discard | [D] Delete | [r] Rename | [ESC/q] Exit'
+      return { line1, line2 }
+    } else if (view === 'main' && focusedPanel === 'branches') {
+      const line1 = `${globalCommands} | [ENTER] Checkout | [m] Merge`
+      const line2 = '[n] New Branch | [D] Delete | [R] Rename | [u] Set Upstream | [U] Unset Upstream | [ESC/q] Exit'
+      return { line1, line2 }
+    } else if (view === 'main' && focusedPanel === 'log') {
+      const line1 = `${globalCommands} | [ENTER] View Diff`
+      const line2 = '[y] Cherry-pick | [R] Revert | [X] Reset | [Y] Copy Hash | [t] Tag | [ESC/q] Exit'
+      return { line1, line2 }
+    } else if (view === 'log') {
+      const line1 = `${globalCommands} | [ENTER] View Diff`
+      const line2 = '[y] Cherry-pick | [R] Revert | [X] Reset | [Y] Copy Hash | [t] Tag | [1-4] Switch View | [ESC/q] Exit'
+      return { line1, line2 }
+    } else if (view === 'stash') {
+      const line1 = `${globalCommands} | [s] Create Stash`
+      const line2 = '[ENTER] Apply | [P] Pop | [D] Drop | [V] View Diff | [1-4] Switch View | [ESC/q] Exit'
+      return { line1, line2 }
+    } else if (view === 'diff') {
+      const line1 = `${globalCommands} | [1-4] Switch View`
+      const line2 = '[ESC/q] Exit'
+      return { line1, line2 }
+    }
+    
+    // Fallback
+    return {
+      line1: globalCommands,
+      line2: '[ESC/q] Exit',
+    }
+  }
+
+  const { line1, line2 } = getContextualCommands()
+
   return (
     <box
       width="100%"
@@ -15,10 +72,10 @@ export function Footer({ message }: FooterProps) {
       flexDirection="column"
     >
       <box paddingLeft={theme.spacing.xs} paddingTop={theme.spacing.none}>
-        <text fg={theme.colors.text.muted}>Commands: [/] Palette | [,] Settings | [P] Push | [p] Pull | [f] Fetch | [c] Commit | [s] Stash</text>
+        <text fg={theme.colors.text.muted}>{line1}</text>
       </box>
       <box paddingLeft={theme.spacing.xs} paddingTop={theme.spacing.none}>
-        <text fg={theme.colors.text.muted}>File Ops: [SPACE] Stage/Unstage | [a] Stage All | [A] Unstage All | [d] Discard | [D] Delete | [r] Rename | [ESC/q] Exit</text>
+        <text fg={theme.colors.text.muted}>{line2}</text>
       </box>
       {message && (
         <box paddingLeft={theme.spacing.xs}>
