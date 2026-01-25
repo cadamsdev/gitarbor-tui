@@ -116,7 +116,6 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
       // Apply theme immediately
       setTheme(themeId)
       setCurrentThemeId(themeId)
-      setError('Theme applied! Restart to see full changes.')
     } catch (err) {
       setError('Failed to save theme preference')
     } finally {
