@@ -887,4 +887,13 @@ export class GitClient {
       throw new Error(`Failed to copy to clipboard: ${error}`)
     }
   }
+
+  async getVersion(): Promise<string> {
+    try {
+      const { stdout } = await execAsync('git --version', { cwd: this.cwd })
+      return stdout.trim()
+    } catch (error) {
+      throw new Error(`Failed to get git version: ${error}`)
+    }
+  }
 }
