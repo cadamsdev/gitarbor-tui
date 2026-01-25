@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Input } from './Input'
 import type { Command } from '../types/commands'
 
 interface CommandPaletteProps {
@@ -57,7 +58,7 @@ export function CommandPalette({ commands, onClose }: CommandPaletteProps) {
         <text> </text>
         
         <box marginBottom={1}>
-          <input
+          <Input
             value={search}
             onInput={setSearch}
             placeholder="Type to search commands..."

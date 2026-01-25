@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Input } from './Input'
 
 interface BranchModalProps {
   onCreateBranch: (name: string, startPoint?: string) => void
@@ -56,7 +57,7 @@ export function BranchModal({ onCreateBranch, onCancel, currentCommit }: BranchM
       
       {/* Branch name */}
       <text fg={theme.colors.text.muted}>Branch name:</text>
-      <input
+      <Input
         width={76}
         placeholder="feature/my-new-feature"
         value={branchName}
@@ -71,7 +72,7 @@ export function BranchModal({ onCreateBranch, onCancel, currentCommit }: BranchM
       <text fg={theme.colors.text.muted}>
         Start point (optional):
       </text>
-      <input
+      <Input
         width={76}
         placeholder={currentCommit ? `Leave empty for HEAD (${currentCommit})` : 'Leave empty for HEAD'}
         value={startPoint}

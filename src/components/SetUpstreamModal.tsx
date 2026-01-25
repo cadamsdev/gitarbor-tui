@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Input } from './Input'
 import type { GitBranch } from '../types/git'
 
 interface SetUpstreamModalProps {
@@ -89,7 +90,7 @@ export function SetUpstreamModal({ branch, remoteBranches, onSetUpstream, onCanc
       ) : (
         <>
           <text fg={theme.colors.text.muted}>Enter upstream manually:</text>
-          <input
+          <Input
             width={76}
             placeholder="origin/main"
             value={upstream}

@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Input } from './Input'
 
 interface StashModalProps {
   onStash: (message: string) => void
@@ -48,7 +49,7 @@ export function StashModal({ onStash, onCancel }: StashModalProps) {
       
       {/* Message input */}
       <text fg={theme.colors.text.muted}>Message (optional):</text>
-      <input
+      <Input
         width={76}
         placeholder="Description of stashed changes"
         value={message}

@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Input } from './Input'
 
 interface RenameModalProps {
   currentPath: string
@@ -50,7 +51,7 @@ export function RenameModal({ currentPath, onRename, onCancel }: RenameModalProp
       
       {/* New path */}
       <text fg={theme.colors.text.muted}>New path:</text>
-      <input
+      <Input
         width={76}
         placeholder="Enter new path"
         value={newPath}

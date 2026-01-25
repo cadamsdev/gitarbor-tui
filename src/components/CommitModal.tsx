@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Input } from './Input'
 
 interface CommitModalProps {
   onCommit: (message: string) => void
@@ -131,7 +132,7 @@ export function CommitModal({ onCommit, onCancel }: CommitModalProps) {
         <text fg={theme.colors.text.muted} width={10}>Subject:</text>
         <text fg={subjectColor}>({subjectLength}/50)</text>
       </box>
-      <input
+      <Input
         width={76}
         placeholder="Brief description (50 chars recommended)"
         value={subject}
@@ -144,7 +145,7 @@ export function CommitModal({ onCommit, onCancel }: CommitModalProps) {
       
       {/* Body */}
       <text fg={theme.colors.text.muted}>Body (optional):</text>
-      <input
+      <Input
         width={76}
         placeholder="Detailed explanation (press Tab to switch fields)"
         value={body}

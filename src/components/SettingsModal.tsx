@@ -5,6 +5,7 @@ import { promisify } from 'util'
 import { homedir } from 'os'
 import { readFile, writeFile } from 'fs/promises'
 import { theme, themes, getThemeIds, setTheme, type Theme } from '../theme'
+import { Input } from './Input'
 import type { } from '../theme'
 
 const execAsync = promisify(exec)
@@ -229,7 +230,7 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
                 Name:
               </text>
               {editMode && selectedField === 'name' ? (
-                <input
+                <Input
                   value={editValue}
                   onInput={setEditValue}
                   onSubmit={handleSaveGitField}
@@ -250,7 +251,7 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
                 Email:
               </text>
               {editMode && selectedField === 'email' ? (
-                <input
+                <Input
                   value={editValue}
                   onInput={setEditValue}
                   onSubmit={handleSaveGitField}

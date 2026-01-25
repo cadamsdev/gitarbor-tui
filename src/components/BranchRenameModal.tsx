@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Input } from './Input'
 
 interface BranchRenameModalProps {
   currentName: string
@@ -49,7 +50,7 @@ export function BranchRenameModal({ currentName, onRenameBranch, onCancel }: Bra
       <text> </text>
       
       <text fg={theme.colors.text.muted}>New name:</text>
-      <input
+      <Input
         width={76}
         placeholder="new-branch-name"
         value={newName}

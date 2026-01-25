@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Input } from './Input'
 
 interface TagModalProps {
   commitHash?: string
@@ -76,7 +77,7 @@ export function TagModal({
 
       <box flexDirection="column" marginTop={theme.spacing.sm}>
         <text fg={theme.colors.text.secondary}>Tag name:</text>
-        <input
+        <Input
           width="100%"
           value={tagName}
           onChange={setTagName}
@@ -94,7 +95,7 @@ export function TagModal({
 
       <box flexDirection="column" marginTop={theme.spacing.sm}>
         <text fg={theme.colors.text.secondary}>Tag message (optional):</text>
-        <input
+        <Input
           width="100%"
           value={tagMessage}
           onChange={setTagMessage}
