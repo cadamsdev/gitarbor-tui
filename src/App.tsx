@@ -32,7 +32,7 @@ export function App({ cwd }: { cwd: string }) {
   const [git] = useState(() => new GitClient(cwd))
   const [watcher] = useState(() => new FileSystemWatcher(cwd, () => {}))
   const [view, setView] = useState<View>('main')
-  const [focusedPanel, setFocusedPanel] = useState<'status' | 'branches' | 'log'>('status')
+  const [focusedPanel, setFocusedPanel] = useState<'status' | 'branches' | 'log' | 'stashes' | 'info'>('status')
   const [status, setStatus] = useState<GitStatus>({
     branch: '',
     ahead: 0,
@@ -703,6 +703,10 @@ export function App({ cwd }: { cwd: string }) {
           return status.staged.length + status.unstaged.length + status.untracked.length - 1
         } else if (focusedPanel === 'branches') {
           return branches.filter((b) => !b.remote).length - 1
+        } else if (focusedPanel === 'stashes') {
+          return Math.min(stashes.length - 1, 2) // Only show first 3 stashes in sidebar
+        } else if (focusedPanel === 'info') {
+          return 0 // Info panel is not selectable
         } else {
           return Math.min(commits.length - 1, 9) // log panel shows max 10 commits
         }
@@ -777,8 +781,8 @@ export function App({ cwd }: { cwd: string }) {
     },
     {
       id: 'panel-status',
-      label: 'Panel: Status',
-      description: 'Focus status panel',
+      label: 'Panel: Files',
+      description: 'Focus files panel',
       shortcut: '[',
       execute: () => {
         setView('main')
@@ -799,12 +803,34 @@ export function App({ cwd }: { cwd: string }) {
     },
     {
       id: 'panel-log',
-      label: 'Panel: Log',
-      description: 'Focus log panel',
+      label: 'Panel: Commits',
+      description: 'Focus commits panel',
       shortcut: '\\',
       execute: () => {
         setView('main')
         setFocusedPanel('log')
+        setSelectedIndex(0)
+      },
+    },
+    {
+      id: 'panel-stashes',
+      label: 'Panel: Stashes',
+      description: 'Focus stashes panel',
+      shortcut: '|',
+      execute: () => {
+        setView('main')
+        setFocusedPanel('stashes')
+        setSelectedIndex(0)
+      },
+    },
+    {
+      id: 'panel-info',
+      label: 'Panel: Repository Info',
+      description: 'Focus repository info panel',
+      shortcut: '{',
+      execute: () => {
+        setView('main')
+        setFocusedPanel('info')
         setSelectedIndex(0)
       },
     },
@@ -1241,6 +1267,12 @@ export function App({ cwd }: { cwd: string }) {
       } else if (key.sequence === '\\') {
         setFocusedPanel('log')
         setSelectedIndex(0)
+      } else if (key.sequence === '|') {
+        setFocusedPanel('stashes')
+        setSelectedIndex(0)
+      } else if (key.sequence === '{') {
+        setFocusedPanel('info')
+        setSelectedIndex(0)
       }
     }
 
@@ -1295,6 +1327,25 @@ export function App({ cwd }: { cwd: string }) {
       // 'U' key to unset upstream
       if (key.sequence === 'U' && branch && branch.upstream) {
         void handleUnsetUpstream(branch.name)
+      }
+    }
+
+    // Stash operations (when in stashes panel)
+    if (view === 'main' && focusedPanel === 'stashes') {
+      const stash = stashes[selectedIndex]
+
+      if (stash && key.name === 'return') {
+        // Apply stash on Enter
+        void handleApplyStash(stash.index)
+      } else if (stash && key.sequence === 'P') {
+        // Pop stash on Shift+P
+        void handlePopStash(stash.index)
+      } else if (stash && key.sequence === 'D') {
+        // Drop stash on Shift+D
+        handleDropStashWithConfirm(stash.index, stash.name, stash.message)
+      } else if (stash && key.sequence === 'V') {
+        // View stash diff on Shift+V
+        void handleViewStashDiff(stash.index)
       }
     }
 
@@ -1469,9 +1520,11 @@ export function App({ cwd }: { cwd: string }) {
   const getViewName = (): string => {
     switch (view) {
       case 'main': {
-        if (focusedPanel === 'status') return 'Main (Status)'
+        if (focusedPanel === 'status') return 'Main (Files)'
         if (focusedPanel === 'branches') return 'Main (Branches)'
-        return 'Main (Log)'
+        if (focusedPanel === 'stashes') return 'Main (Stashes)'
+        if (focusedPanel === 'info') return 'Main (Info)'
+        return 'Main (Commits)'
       }
       case 'log': return 'Log'
       case 'diff': return 'Diff'
@@ -1495,11 +1548,15 @@ export function App({ cwd }: { cwd: string }) {
           untracked={status.untracked}
           branches={branches}
           commits={commits}
+          stashes={stashes}
           selectedIndex={selectedIndex}
           focusedPanel={focusedPanel}
           onStage={handleStage}
           onUnstage={handleUnstage}
           mergeState={mergeState}
+          currentBranch={status.branch}
+          ahead={status.ahead}
+          behind={status.behind}
         />
       )}
 

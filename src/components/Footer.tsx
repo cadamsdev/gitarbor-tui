@@ -4,7 +4,7 @@ import type { View } from '../types/git'
 interface FooterProps {
   message: string
   view: View
-  focusedPanel?: 'status' | 'branches' | 'log'
+  focusedPanel?: 'status' | 'branches' | 'log' | 'stashes' | 'info'
   hasStaged?: boolean
   hasUnstaged?: boolean
   hasUntracked?: boolean
@@ -39,6 +39,14 @@ export function Footer({
       const line1 = `${globalCommands} | [ENTER] View Diff`
       const line2 = '[y] Cherry-pick | [R] Revert | [X] Reset | [Y] Copy Hash | [t] Tag | [ESC/q] Exit'
       return { line1, line2 }
+    } else if (view === 'main' && focusedPanel === 'stashes') {
+      const line1 = `${globalCommands} | [s] Create Stash`
+      const line2 = '[ENTER] Apply | [P] Pop | [D] Drop | [V] View Diff | [4] Full Stash View | [ESC/q] Exit'
+      return { line1, line2 }
+    } else if (view === 'main' && focusedPanel === 'info') {
+      const line1 = `${globalCommands}`
+      const line2 = '[[] Files | []] Branches | [\\] Commits | [|] Stashes | [ESC/q] Exit'
+      return { line1, line2 }
     } else if (view === 'log') {
       const line1 = `${globalCommands} | [ENTER] View Diff`
       const line2 = '[y] Cherry-pick | [R] Revert | [X] Reset | [Y] Copy Hash | [t] Tag | [1-4] Switch View | [ESC/q] Exit'
@@ -56,7 +64,7 @@ export function Footer({
     // Fallback
     return {
       line1: globalCommands,
-      line2: '[ESC/q] Exit',
+      line2: '[[] Files | []] Branches | [\\] Commits | [ESC/q] Exit',
     }
   }
 
