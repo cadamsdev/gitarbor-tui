@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useKeyboard, useRenderer } from '@opentui/react'
+import { theme } from './theme'
 import { GitClient } from './utils/git'
 import { FileSystemWatcher } from './utils/watcher'
 import { Header } from './components/Header'
@@ -609,7 +610,7 @@ export function App({ cwd }: { cwd: string }) {
   }
 
   return (
-    <box width="100%" height="100%" flexDirection="column">
+    <box width="100%" height="100%" flexDirection="column" backgroundColor={theme.colors.background.primary}>
       <Header
         branch={status.branch}
         ahead={status.ahead}
