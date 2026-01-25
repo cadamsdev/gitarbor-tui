@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Modal } from './Modal'
 import { Input } from './Input'
 import type { Command } from '../types/commands'
 
@@ -38,71 +39,56 @@ export function CommandPalette({ commands, onClose }: CommandPaletteProps) {
   })
 
   return (
-    <box
-      style={{ position: 'absolute', zIndex: 1000 }}
-      width="100%"
-      height="100%"
-      justifyContent="center"
-      alignItems="center"
+    <Modal
+      width={80}
+      height={20}
+      title="Command Palette"
     >
-      <box
-        borderStyle="double"
-        borderColor={theme.colors.primary}
-        padding={theme.spacing.xs}
-        width={80}
-        height={20}
-        flexDirection="column"
-        backgroundColor={theme.colors.background.modal}
-      >
-        <text fg={theme.colors.primary}>Command Palette</text>
-        <text> </text>
-        
-        <box marginBottom={1}>
-          <Input
-            value={search}
-            onInput={setSearch}
-            placeholder="Type to search commands..."
-            focused={true}
-            width={76}
-          />
-        </box>
-        
-        <box
-          flexDirection="column"
-          flexGrow={1}
-          style={{ overflow: 'hidden' }}
-        >
-          {search.trim().length === 0 ? null : filteredCommands.length === 0 ? (
-            <text fg={theme.colors.text.muted}>No commands found</text>
-          ) : (
-            filteredCommands.slice(0, 10).map((cmd, index) => (
-              <box key={cmd.id} flexDirection="row" marginBottom={0}>
-                <text fg={index === selectedIndex ? theme.colors.git.modified : theme.colors.text.muted} width={2}>
-                  {index === selectedIndex ? '>' : ' '}
-                </text>
-                <text fg={index === selectedIndex ? theme.colors.text.primary : theme.colors.text.muted} width={30}>
-                  {cmd.label}
-                </text>
-                <text fg={theme.colors.text.disabled} width={30}>
-                  {cmd.description}
-                </text>
-                {cmd.shortcut && (
-                  <text fg={theme.colors.primary} width={14}>
-                    {cmd.shortcut}
-                  </text>
-                )}
-              </box>
-            ))
-          )}
-        </box>
-        
-        <text> </text>
-        <box borderStyle={theme.borders.style} borderColor={theme.colors.border} padding={theme.spacing.none}>
-          <text fg={theme.colors.text.muted}>
-            Up/Down: Navigate | Enter: Execute | ESC: Close
-          </text>
-        </box>
+      <box marginBottom={1}>
+        <Input
+          value={search}
+          onInput={setSearch}
+          placeholder="Type to search commands..."
+          focused={true}
+          width={76}
+        />
       </box>
-    </box>
+      
+      <box
+        flexDirection="column"
+        flexGrow={1}
+        style={{ overflow: 'hidden' }}
+      >
+        {search.trim().length === 0 ? null : filteredCommands.length === 0 ? (
+          <text fg={theme.colors.text.muted}>No commands found</text>
+        ) : (
+          filteredCommands.slice(0, 10).map((cmd, index) => (
+            <box key={cmd.id} flexDirection="row" marginBottom={0}>
+              <text fg={index === selectedIndex ? theme.colors.git.modified : theme.colors.text.muted} width={2}>
+                {index === selectedIndex ? '>' : ' '}
+              </text>
+              <text fg={index === selectedIndex ? theme.colors.text.primary : theme.colors.text.muted} width={30}>
+                {cmd.label}
+              </text>
+              <text fg={theme.colors.text.disabled} width={30}>
+                {cmd.description}
+              </text>
+              {cmd.shortcut && (
+                <text fg={theme.colors.primary} width={14}>
+                  {cmd.shortcut}
+                </text>
+              )}
+            </box>
+          ))
+        )}
+      </box>
+      
+      <text> </text>
+      <box borderStyle={theme.borders.style} borderColor={theme.colors.border} padding={theme.spacing.none}>
+        <text fg={theme.colors.text.muted}>
+          Up/Down: Navigate | Enter: Execute | ESC: Close
+        </text>
+      </box>
+    </Modal>
   )
 }

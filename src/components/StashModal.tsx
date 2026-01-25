@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Modal } from './Modal'
 import { Input } from './Input'
 
 interface StashModalProps {
@@ -24,24 +25,14 @@ export function StashModal({ onStash, onCancel }: StashModalProps) {
   })
 
   return (
-    <box
-      style={{
-        position: 'absolute',
-        left: 10,
-        top: 5,
-        zIndex: 1000,
-      }}
+    <Modal
       width={80}
       height={12}
-      backgroundColor={theme.colors.background.modal}
-      borderStyle="double"
-      borderColor={theme.colors.primary}
-      padding={theme.spacing.xs}
-      flexDirection="column"
+      title="Create Stash"
+      centered={false}
+      left={10}
+      top={5}
     >
-      <text fg={theme.colors.primary}>Create Stash</text>
-      <text> </text>
-      
       <text fg={theme.colors.text.muted}>
         Stash your working directory changes to save them for later.
       </text>
@@ -70,6 +61,6 @@ export function StashModal({ onStash, onCancel }: StashModalProps) {
           [Enter] Create Stash | [Esc] Cancel
         </text>
       </box>
-    </box>
+    </Modal>
   )
 }

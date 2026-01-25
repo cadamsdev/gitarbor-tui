@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Modal } from './Modal'
 import { Input } from './Input'
 
 interface CommitModalProps {
@@ -61,24 +62,14 @@ export function CommitModal({ onCommit, onCancel }: CommitModalProps) {
 
   if (showPreview) {
     return (
-      <box
-        style={{
-          position: 'absolute',
-          left: 10,
-          top: 3,
-          zIndex: 1000,
-        }}
+      <Modal
         width={80}
         height={20}
-        backgroundColor={theme.colors.background.modal}
-        borderStyle="double"
-        borderColor={theme.colors.primary}
-        padding={theme.spacing.xs}
-        flexDirection="column"
+        title="Commit Message Preview"
+        centered={false}
+        left={10}
+        top={3}
       >
-        <text fg={theme.colors.primary}>Commit Message Preview</text>
-        <text> </text>
-        
         <box
           borderStyle={theme.borders.style}
           borderColor={theme.colors.border}
@@ -104,29 +95,19 @@ export function CommitModal({ onCommit, onCancel }: CommitModalProps) {
         <text fg={theme.colors.text.muted}>
           [Ctrl+P] Back to Edit | [Ctrl+S] Commit | [Esc] Cancel
         </text>
-      </box>
+      </Modal>
     )
   }
 
   return (
-    <box
-      style={{
-        position: 'absolute',
-        left: 10,
-        top: 3,
-        zIndex: 1000,
-      }}
+    <Modal
       width={80}
       height={20}
-      backgroundColor={theme.colors.background.modal}
-      borderStyle="double"
-      borderColor={theme.colors.primary}
-      padding={theme.spacing.xs}
-      flexDirection="column"
+      title="Create Commit"
+      centered={false}
+      left={10}
+      top={3}
     >
-      <text fg={theme.colors.primary}>Create Commit</text>
-      <text> </text>
-      
       {/* Subject line */}
       <box flexDirection="row">
         <text fg={theme.colors.text.muted} width={10}>Subject:</text>
@@ -177,6 +158,6 @@ export function CommitModal({ onCommit, onCancel }: CommitModalProps) {
             : 'ℹ Subject line over 50 chars (recommended limit)'}
         </text>
       )}
-    </box>
+    </Modal>
   )
 }

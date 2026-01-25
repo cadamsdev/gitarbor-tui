@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Modal } from './Modal'
 import { Input } from './Input'
 
 interface RenameModalProps {
@@ -25,24 +26,14 @@ export function RenameModal({ currentPath, onRename, onCancel }: RenameModalProp
   })
 
   return (
-    <box
-      style={{
-        position: 'absolute',
-        left: 10,
-        top: 5,
-        zIndex: 1000,
-      }}
+    <Modal
       width={80}
       height={12}
-      backgroundColor={theme.colors.background.modal}
-      borderStyle="double"
-      borderColor={theme.colors.primary}
-      padding={theme.spacing.xs}
-      flexDirection="column"
+      title="Rename/Move File"
+      centered={false}
+      left={10}
+      top={5}
     >
-      <text fg={theme.colors.primary}>Rename/Move File</text>
-      <text> </text>
-      
       {/* Current path */}
       <text fg={theme.colors.text.muted}>Current path:</text>
       <text fg={theme.colors.text.secondary}>{currentPath}</text>
@@ -72,6 +63,6 @@ export function RenameModal({ currentPath, onRename, onCancel }: RenameModalProp
           [Enter] Rename | [Esc] Cancel
         </text>
       </box>
-    </box>
+    </Modal>
   )
 }

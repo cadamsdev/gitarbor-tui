@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Modal } from './Modal'
 import { Input } from './Input'
 
 interface BranchModalProps {
@@ -37,24 +38,14 @@ export function BranchModal({ onCreateBranch, onCancel, currentCommit }: BranchM
   })
 
   return (
-    <box
-      style={{
-        position: 'absolute',
-        left: 10,
-        top: 3,
-        zIndex: 1000,
-      }}
+    <Modal
       width={80}
       height={16}
-      backgroundColor={theme.colors.background.modal}
-      borderStyle="double"
-      borderColor={theme.colors.primary}
-      padding={theme.spacing.xs}
-      flexDirection="column"
+      title="Create New Branch"
+      centered={false}
+      left={10}
+      top={3}
     >
-      <text fg={theme.colors.primary}>Create New Branch</text>
-      <text> </text>
-      
       {/* Branch name */}
       <text fg={theme.colors.text.muted}>Branch name:</text>
       <Input
@@ -93,6 +84,6 @@ export function BranchModal({ onCreateBranch, onCancel, currentCommit }: BranchM
           [Tab] Switch Fields | [Enter] Create | [Esc] Cancel
         </text>
       </box>
-    </box>
+    </Modal>
   )
 }

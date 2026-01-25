@@ -5,6 +5,7 @@ import { promisify } from 'util'
 import { homedir } from 'os'
 import { readFile, writeFile } from 'fs/promises'
 import { theme, themes, getThemeIds, setTheme, type Theme } from '../theme'
+import { Modal } from './Modal'
 import { Input } from './Input'
 import type { } from '../theme'
 
@@ -162,23 +163,13 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
 
   if (loading) {
     return (
-      <box
-        style={{ position: 'absolute', zIndex: 1000 }}
-        width="100%"
-        height="100%"
-        justifyContent="center"
-        alignItems="center"
+      <Modal
+        width={60}
+        height={5}
+        borderColor={theme.colors.primary}
       >
-        <box
-          borderStyle="double"
-          borderColor={theme.colors.primary}
-          padding={theme.spacing.xs}
-          width={60}
-          backgroundColor={theme.colors.background.modal}
-        >
-          <text fg={theme.colors.text.muted}>Loading configuration...</text>
-        </box>
-      </box>
+        <text fg={theme.colors.text.muted}>Loading configuration...</text>
+      </Modal>
     )
   }
 
@@ -186,175 +177,161 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
   const selectedTheme = themes[themeIds[selectedThemeIndex]!]
 
   return (
-    <box
-      style={{ position: 'absolute', zIndex: 1000 }}
-      width="100%"
-      height="100%"
-      justifyContent="center"
-      alignItems="center"
+    <Modal
+      width={90}
+      height={22}
+      title="Settings"
     >
-      <box
-        borderStyle="double"
-        borderColor={theme.colors.primary}
-        padding={theme.spacing.xs}
-        width={90}
-        height={22}
-        flexDirection="column"
-        backgroundColor={theme.colors.background.modal}
-      >
-        {/* Header with tabs */}
-        <box flexDirection="row" marginBottom={1}>
-          <text fg={theme.colors.primary}>Settings</text>
-          <text> </text>
-          <text fg={currentTab === 'git' ? theme.colors.primary : theme.colors.text.muted}>
-            [Git Config]
-          </text>
-          <text> </text>
-          <text fg={currentTab === 'theme' ? theme.colors.primary : theme.colors.text.muted}>
-            [Themes]
-          </text>
-        </box>
-        
-        {/* Git Config Tab */}
-        {currentTab === 'git' && (
-          <>
-            <text fg={theme.colors.text.muted}>Git Global Configuration</text>
-            <text> </text>
-            
-            {/* Name field */}
-            <box flexDirection="row" marginBottom={1}>
-              <text fg={selectedField === 'name' && !editMode ? theme.colors.git.modified : theme.colors.text.muted}>
-                {selectedField === 'name' && !editMode ? '> ' : '  '}
-              </text>
-              <text fg={theme.colors.text.muted} width={10}>
-                Name:
-              </text>
-              {editMode && selectedField === 'name' ? (
-                <Input
-                  value={editValue}
-                  onInput={setEditValue}
-                  onSubmit={handleSaveGitField}
-                  focused={true}
-                  width={70}
-                />
-              ) : (
-                <text fg={theme.colors.text.primary}>{gitConfig.name || '(not set)'}</text>
-              )}
-            </box>
-            
-            {/* Email field */}
-            <box flexDirection="row">
-              <text fg={selectedField === 'email' && !editMode ? theme.colors.git.modified : theme.colors.text.muted}>
-                {selectedField === 'email' && !editMode ? '> ' : '  '}
-              </text>
-              <text fg={theme.colors.text.muted} width={10}>
-                Email:
-              </text>
-              {editMode && selectedField === 'email' ? (
-                <Input
-                  value={editValue}
-                  onInput={setEditValue}
-                  onSubmit={handleSaveGitField}
-                  focused={true}
-                  width={70}
-                />
-              ) : (
-                <text fg={theme.colors.text.primary}>{gitConfig.email || '(not set)'}</text>
-              )}
-            </box>
-          </>
-        )}
-
-        {/* Theme Tab */}
-        {currentTab === 'theme' && selectedTheme && (
-          <>
-            <text fg={theme.colors.text.muted}>Choose a color theme</text>
-            <text> </text>
-            
-            {/* Theme list and preview side-by-side */}
-            <box flexDirection="row" flexGrow={1}>
-              {/* Theme list */}
-              <box flexDirection="column" width={35} marginRight={2}>
-                {themeIds.map((themeId, index) => {
-                  const t = themes[themeId]
-                  const isSelected = index === selectedThemeIndex
-                  const isCurrent = themeId === currentThemeId
-                  return (
-                    <box key={themeId} flexDirection="row" marginBottom={1}>
-                      <text fg={isSelected ? theme.colors.git.modified : theme.colors.text.muted}>
-                        {isSelected ? '> ' : '  '}
-                      </text>
-                      <text fg={isSelected ? theme.colors.text.primary : theme.colors.text.secondary}>
-                        {t?.name}
-                        {isCurrent ? ' (active)' : ''}
-                      </text>
-                    </box>
-                  )
-                })}
-              </box>
-
-              {/* Theme preview */}
-              <box
-                flexDirection="column"
-                flexGrow={1}
-                borderStyle={theme.borders.style}
-                borderColor={theme.colors.border}
-                padding={theme.spacing.xs}
-              >
-                <text fg={theme.colors.text.muted}>Preview: {selectedTheme.name}</text>
-                <text fg={theme.colors.text.muted}>{selectedTheme.description}</text>
-                <text> </text>
-                
-                {/* Color samples */}
-                <box flexDirection="row" marginBottom={1}>
-                  <text fg={selectedTheme.colors.git.staged}>Staged  </text>
-                  <text fg={selectedTheme.colors.git.modified}>Modified  </text>
-                  <text fg={selectedTheme.colors.git.untracked}>Untracked</text>
-                </box>
-                
-                <box flexDirection="row" marginBottom={1}>
-                  <text fg={selectedTheme.colors.git.added}>Added  </text>
-                  <text fg={selectedTheme.colors.git.deleted}>Deleted</text>
-                </box>
-                
-                <box flexDirection="row" marginBottom={1}>
-                  <text fg={selectedTheme.colors.status.success}>Success  </text>
-                  <text fg={selectedTheme.colors.status.error}>Error  </text>
-                  <text fg={selectedTheme.colors.status.warning}>Warning</text>
-                </box>
-                
-                <box flexDirection="row">
-                  <text fg={selectedTheme.colors.primary}>Primary  </text>
-                  <text fg={selectedTheme.colors.text.muted}>Muted  </text>
-                  <text fg={selectedTheme.colors.status.info}>Info</text>
-                </box>
-              </box>
-            </box>
-          </>
-        )}
-        
-        {error && (
-          <>
-            <text> </text>
-            <text fg={theme.colors.status.error}>{error}</text>
-          </>
-        )}
-        
+      {/* Tabs */}
+      <box flexDirection="row" marginBottom={1}>
+        <text fg={currentTab === 'git' ? theme.colors.primary : theme.colors.text.muted}>
+          [Git Config]
+        </text>
         <text> </text>
-        <box borderStyle={theme.borders.style} borderColor={theme.colors.border} padding={theme.spacing.none}>
-          <text fg={theme.colors.text.muted}>
-            {saving ? (
-              'Saving...'
-            ) : currentTab === 'git' ? (
-              editMode
-                ? 'Enter: Save | ESC: Cancel'
-                : 'Tab: Switch Tab | Up/Down: Navigate | Enter/E: Edit | ESC: Close'
-            ) : (
-              'Tab: Switch Tab | Up/Down: Select Theme | Enter/A: Apply Theme | ESC: Close'
-            )}
-          </text>
-        </box>
+        <text fg={currentTab === 'theme' ? theme.colors.primary : theme.colors.text.muted}>
+          [Themes]
+        </text>
       </box>
-    </box>
+      
+      {/* Git Config Tab */}
+      {currentTab === 'git' && (
+        <>
+          <text fg={theme.colors.text.muted}>Git Global Configuration</text>
+          <text> </text>
+          
+          {/* Name field */}
+          <box flexDirection="row" marginBottom={1}>
+            <text fg={selectedField === 'name' && !editMode ? theme.colors.git.modified : theme.colors.text.muted}>
+              {selectedField === 'name' && !editMode ? '> ' : '  '}
+            </text>
+            <text fg={theme.colors.text.muted} width={10}>
+              Name:
+            </text>
+            {editMode && selectedField === 'name' ? (
+              <Input
+                value={editValue}
+                onInput={setEditValue}
+                onSubmit={handleSaveGitField}
+                focused={true}
+                width={70}
+              />
+            ) : (
+              <text fg={theme.colors.text.primary}>{gitConfig.name || '(not set)'}</text>
+            )}
+          </box>
+          
+          {/* Email field */}
+          <box flexDirection="row">
+            <text fg={selectedField === 'email' && !editMode ? theme.colors.git.modified : theme.colors.text.muted}>
+              {selectedField === 'email' && !editMode ? '> ' : '  '}
+            </text>
+            <text fg={theme.colors.text.muted} width={10}>
+              Email:
+            </text>
+            {editMode && selectedField === 'email' ? (
+              <Input
+                value={editValue}
+                onInput={setEditValue}
+                onSubmit={handleSaveGitField}
+                focused={true}
+                width={70}
+              />
+            ) : (
+              <text fg={theme.colors.text.primary}>{gitConfig.email || '(not set)'}</text>
+            )}
+          </box>
+        </>
+      )}
+
+      {/* Theme Tab */}
+      {currentTab === 'theme' && selectedTheme && (
+        <>
+          <text fg={theme.colors.text.muted}>Choose a color theme</text>
+          <text> </text>
+          
+          {/* Theme list and preview side-by-side */}
+          <box flexDirection="row" flexGrow={1}>
+            {/* Theme list */}
+            <box flexDirection="column" width={35} marginRight={2}>
+              {themeIds.map((themeId, index) => {
+                const t = themes[themeId]
+                const isSelected = index === selectedThemeIndex
+                const isCurrent = themeId === currentThemeId
+                return (
+                  <box key={themeId} flexDirection="row" marginBottom={1}>
+                    <text fg={isSelected ? theme.colors.git.modified : theme.colors.text.muted}>
+                      {isSelected ? '> ' : '  '}
+                    </text>
+                    <text fg={isSelected ? theme.colors.text.primary : theme.colors.text.secondary}>
+                      {t?.name}
+                      {isCurrent ? ' (active)' : ''}
+                    </text>
+                  </box>
+                )
+              })}
+            </box>
+
+            {/* Theme preview */}
+            <box
+              flexDirection="column"
+              flexGrow={1}
+              borderStyle={theme.borders.style}
+              borderColor={theme.colors.border}
+              padding={theme.spacing.xs}
+            >
+              <text fg={theme.colors.text.muted}>Preview: {selectedTheme.name}</text>
+              <text fg={theme.colors.text.muted}>{selectedTheme.description}</text>
+              <text> </text>
+              
+              {/* Color samples */}
+              <box flexDirection="row" marginBottom={1}>
+                <text fg={selectedTheme.colors.git.staged}>Staged  </text>
+                <text fg={selectedTheme.colors.git.modified}>Modified  </text>
+                <text fg={selectedTheme.colors.git.untracked}>Untracked</text>
+              </box>
+              
+              <box flexDirection="row" marginBottom={1}>
+                <text fg={selectedTheme.colors.git.added}>Added  </text>
+                <text fg={selectedTheme.colors.git.deleted}>Deleted</text>
+              </box>
+              
+              <box flexDirection="row" marginBottom={1}>
+                <text fg={selectedTheme.colors.status.success}>Success  </text>
+                <text fg={selectedTheme.colors.status.error}>Error  </text>
+                <text fg={selectedTheme.colors.status.warning}>Warning</text>
+              </box>
+              
+              <box flexDirection="row">
+                <text fg={selectedTheme.colors.primary}>Primary  </text>
+                <text fg={selectedTheme.colors.text.muted}>Muted  </text>
+                <text fg={selectedTheme.colors.status.info}>Info</text>
+              </box>
+            </box>
+          </box>
+        </>
+      )}
+      
+      {error && (
+        <>
+          <text> </text>
+          <text fg={theme.colors.status.error}>{error}</text>
+        </>
+      )}
+      
+      <text> </text>
+      <box borderStyle={theme.borders.style} borderColor={theme.colors.border} padding={theme.spacing.none}>
+        <text fg={theme.colors.text.muted}>
+          {saving ? (
+            'Saving...'
+          ) : currentTab === 'git' ? (
+            editMode
+              ? 'Enter: Save | ESC: Cancel'
+              : 'Tab: Switch Tab | Up/Down: Navigate | Enter/E: Edit | ESC: Close'
+          ) : (
+            'Tab: Switch Tab | Up/Down: Select Theme | Enter/A: Apply Theme | ESC: Close'
+          )}
+        </text>
+      </box>
+    </Modal>
   )
 }

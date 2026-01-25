@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Modal } from './Modal'
 
 interface ExitModalProps {
   onConfirm: () => void
@@ -48,67 +49,43 @@ export function ExitModal({ onConfirm, onCancel }: ExitModalProps) {
   useKeyboard(handleKeyboard)
 
   return (
-    <box
-      style={{
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        zIndex: 1000,
-      }}
+    <Modal
+      width={55}
+      height={10}
+      title="Exit GitArbor?"
+      borderColor={theme.colors.status.info}
     >
-      {/* Modal content */}
+      <box style={{ justifyContent: 'center' }}>
+        <text fg={theme.colors.text.muted}>Are you sure you want to quit?</text>
+      </box>
+      <box style={{ marginTop: 1, justifyContent: 'center', flexDirection: 'row', gap: 3 }}>
+        <text
+          bg={selectedOption === 'yes' ? theme.colors.status.info : theme.colors.background.button}
+          fg={selectedOption === 'yes' ? theme.colors.text.inverted : theme.colors.text.disabled}
+        >
+          {selectedOption === 'yes' ? '[✓ Yes]' : '  Yes  '}
+        </text>
+        <text
+          bg={selectedOption === 'no' ? theme.colors.status.info : theme.colors.background.button}
+          fg={selectedOption === 'no' ? theme.colors.text.primary : theme.colors.text.disabled}
+        >
+          {selectedOption === 'no' ? '[✓ No]' : '  No  '}
+        </text>
+      </box>
       <box
         style={{
+          marginTop: 1,
+          justifyContent: 'center',
           border: true,
-          borderStyle: 'double',
-          borderColor: theme.colors.status.info,
-          paddingLeft: theme.spacing.md,
-          paddingRight: theme.spacing.md,
-          paddingTop: theme.spacing.xs,
-          paddingBottom: theme.spacing.xs,
-          flexDirection: 'column',
-          width: 55,
-          backgroundColor: theme.colors.background.modal,
+          borderColor: theme.colors.background.buttonHover,
+          paddingLeft: theme.spacing.xs,
+          paddingRight: theme.spacing.xs,
+          flexDirection: 'row',
+          gap: 1,
         }}
       >
-        <box style={{ justifyContent: 'center' }}>
-          <text fg={theme.colors.status.info}>Exit GitArbor?</text>
-        </box>
-        <box style={{ marginTop: 1, justifyContent: 'center' }}>
-          <text fg={theme.colors.text.muted}>Are you sure you want to quit?</text>
-        </box>
-        <box style={{ marginTop: 1, justifyContent: 'center', flexDirection: 'row', gap: 3 }}>
-          <text
-            bg={selectedOption === 'yes' ? theme.colors.status.info : theme.colors.background.button}
-            fg={selectedOption === 'yes' ? theme.colors.text.inverted : theme.colors.text.disabled}
-          >
-            {selectedOption === 'yes' ? '[✓ Yes]' : '  Yes  '}
-          </text>
-          <text
-            bg={selectedOption === 'no' ? theme.colors.status.info : theme.colors.background.button}
-            fg={selectedOption === 'no' ? theme.colors.text.primary : theme.colors.text.disabled}
-          >
-            {selectedOption === 'no' ? '[✓ No]' : '  No  '}
-          </text>
-        </box>
-        <box
-          style={{
-            marginTop: 1,
-            justifyContent: 'center',
-            border: true,
-            borderColor: theme.colors.background.buttonHover,
-            paddingLeft: theme.spacing.xs,
-            paddingRight: theme.spacing.xs,
-            flexDirection: 'row',
-            gap: 1,
-          }}
-        >
-          <text fg={theme.colors.text.disabled}>←→ select │ Enter confirm │ Y/N quick select</text>
-        </box>
+        <text fg={theme.colors.text.disabled}>←→ select │ Enter confirm │ Y/N quick select</text>
       </box>
-    </box>
+    </Modal>
   )
 }

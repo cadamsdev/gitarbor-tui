@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Modal } from './Modal'
 import { Input } from './Input'
 
 interface TagModalProps {
@@ -40,29 +41,13 @@ export function TagModal({
   useKeyboard(handleKeyPress)
 
   return (
-    <box
-      style={{
-        position: 'absolute',
-        left: '50%',
-        top: '50%',
-        marginLeft: -40,
-        marginTop: -9,
-        zIndex: 1000,
-      }}
+    <Modal
       width={80}
       height={18}
-      backgroundColor={theme.colors.background.modal}
-      borderStyle={theme.borders.style}
-      borderColor={theme.colors.borderFocused}
-      flexDirection="column"
-      padding={theme.spacing.xs}
+      title="Create Tag"
     >
-      <box flexDirection="row">
-        <text fg={theme.colors.primary}>Create Tag</text>
-      </box>
-
       {commitHash && commitMessage && (
-        <box flexDirection="row" marginTop={theme.spacing.xs}>
+        <box flexDirection="row" marginBottom={theme.spacing.xs}>
           <text fg={theme.colors.text.muted}>Commit: </text>
           <text fg={theme.colors.git.modified}>{commitHash} </text>
           <text fg={theme.colors.text.secondary}>{commitMessage}</text>
@@ -70,7 +55,7 @@ export function TagModal({
       )}
 
       {!commitHash && (
-        <box flexDirection="row" marginTop={theme.spacing.xs}>
+        <box flexDirection="row" marginBottom={theme.spacing.xs}>
           <text fg={theme.colors.text.muted}>Creating tag at current HEAD</text>
         </box>
       )}
@@ -78,36 +63,24 @@ export function TagModal({
       <box flexDirection="column" marginTop={theme.spacing.sm}>
         <text fg={theme.colors.text.secondary}>Tag name:</text>
         <Input
-          width="100%"
+          width={76}
           value={tagName}
-          onChange={setTagName}
+          onInput={setTagName}
           onSubmit={handleSubmit}
           placeholder="v1.0.0"
           focused={focusedField === 'name'}
-          textColor={theme.colors.text.primary}
-          backgroundColor={theme.colors.background.modal}
-          focusedTextColor={theme.colors.text.primary}
-          focusedBackgroundColor={theme.colors.background.modal}
-          placeholderColor={theme.colors.text.muted}
-          cursorColor={theme.colors.primary}
         />
       </box>
 
       <box flexDirection="column" marginTop={theme.spacing.sm}>
         <text fg={theme.colors.text.secondary}>Tag message (optional):</text>
         <Input
-          width="100%"
+          width={76}
           value={tagMessage}
-          onChange={setTagMessage}
+          onInput={setTagMessage}
           onSubmit={handleSubmit}
           placeholder="Release notes..."
           focused={focusedField === 'message'}
-          textColor={theme.colors.text.primary}
-          backgroundColor={theme.colors.background.modal}
-          focusedTextColor={theme.colors.text.primary}
-          focusedBackgroundColor={theme.colors.background.modal}
-          placeholderColor={theme.colors.text.muted}
-          cursorColor={theme.colors.primary}
         />
       </box>
 
@@ -116,6 +89,6 @@ export function TagModal({
           [Tab] Switch Fields | [Enter] Create | [Esc] Cancel
         </text>
       </box>
-    </box>
+    </Modal>
   )
 }

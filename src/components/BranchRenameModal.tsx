@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Modal } from './Modal'
 import { Input } from './Input'
 
 interface BranchRenameModalProps {
@@ -26,24 +27,14 @@ export function BranchRenameModal({ currentName, onRenameBranch, onCancel }: Bra
   })
 
   return (
-    <box
-      style={{
-        position: 'absolute',
-        left: 10,
-        top: 3,
-        zIndex: 1000,
-      }}
+    <Modal
       width={80}
       height={12}
-      backgroundColor={theme.colors.background.modal}
-      borderStyle="double"
-      borderColor={theme.colors.primary}
-      padding={theme.spacing.xs}
-      flexDirection="column"
+      title="Rename Branch"
+      centered={false}
+      left={10}
+      top={3}
     >
-      <text fg={theme.colors.primary}>Rename Branch</text>
-      <text> </text>
-      
       <text fg={theme.colors.text.muted}>
         Current: <text fg={theme.colors.text.primary}>{currentName}</text>
       </text>
@@ -71,6 +62,6 @@ export function BranchRenameModal({ currentName, onRenameBranch, onCancel }: Bra
           [Enter] Rename | [Esc] Cancel
         </text>
       </box>
-    </box>
+    </Modal>
   )
 }

@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Modal } from './Modal'
 
 interface ProgressModalProps {
   title: string
@@ -37,24 +38,15 @@ export function ProgressModal({ title, messages, isComplete, error, onClose }: P
   const visibleMessages = messages.slice(-10)
 
   return (
-    <box
-      style={{
-        position: 'absolute',
-        left: 10,
-        top: 5,
-        zIndex: 1000,
-      }}
+    <Modal
       width={80}
       height={15}
-      backgroundColor={theme.colors.background.modal}
-      borderStyle="double"
+      title={title}
       borderColor={error ? theme.colors.status.error : theme.colors.primary}
-      padding={theme.spacing.xs}
-      flexDirection="column"
+      centered={false}
+      left={10}
+      top={5}
     >
-      <text fg={error ? theme.colors.status.error : theme.colors.primary}>{title}</text>
-      <text> </text>
-      
       <box flexDirection="column" flexGrow={1}>
         {visibleMessages.map((msg, idx) => (
           <text key={idx} fg={theme.colors.text.secondary}>{msg}</text>
@@ -80,6 +72,6 @@ export function ProgressModal({ title, messages, isComplete, error, onClose }: P
       {(isComplete || error) && (
         <text fg={theme.colors.text.muted}>[Enter/Esc] Close</text>
       )}
-    </box>
+    </Modal>
   )
 }
