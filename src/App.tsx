@@ -670,12 +670,14 @@ export function App({ cwd }: { cwd: string }) {
       }
     }
 
-    // Navigation
-    if (key.name === 'up') {
-      setSelectedIndex((prev) => Math.max(0, prev - 1))
-    } else if (key.name === 'down') {
-      const max = getMaxIndex()
-      setSelectedIndex((prev) => Math.min(max, prev + 1))
+    // Navigation (only for views with selectable items, not diff view)
+    if (view !== 'diff') {
+      if (key.name === 'up') {
+        setSelectedIndex((prev) => Math.max(0, prev - 1))
+      } else if (key.name === 'down') {
+        const max = getMaxIndex()
+        setSelectedIndex((prev) => Math.min(max, prev + 1))
+      }
     }
 
     // Actions
