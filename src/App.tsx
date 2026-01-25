@@ -1163,6 +1163,19 @@ export function App({ cwd }: { cwd: string }) {
       },
     },
     {
+      id: 'show-git-version',
+      label: 'Show Git Version',
+      description: 'Display the git version being used',
+      execute: async () => {
+        try {
+          const version = await git.getVersion()
+          setMessage(version)
+        } catch (error) {
+          setMessage(`Error getting git version: ${error}`)
+        }
+      },
+    },
+    {
       id: 'exit',
       label: 'Exit',
       description: 'Exit the application',
