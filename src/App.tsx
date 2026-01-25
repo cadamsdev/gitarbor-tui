@@ -1723,22 +1723,10 @@ export function App({ cwd }: { cwd: string }) {
     }
   })
 
-  const getViewName = (): string => {
-    switch (view) {
-      case 'main': {
-        if (focusedPanel === 'status') return 'Main (Files)'
-        if (focusedPanel === 'branches') return 'Main (Branches)'
-        if (focusedPanel === 'stashes') return 'Main (Stashes)'
-        if (focusedPanel === 'info') return 'Main (Info)'
-        if (focusedPanel === 'remotes') return 'Main (Remotes)'
-        return 'Main (Commits)'
-      }
-      case 'log': return 'Log'
-      case 'diff': return 'Diff'
-      case 'stash': return 'Stash'
-      case 'remotes': return 'Remotes'
-    }
-  }
+  const handleViewChange = useCallback((newView: View) => {
+    setView(newView)
+    setSelectedIndex(0)
+  }, [])
 
   return (
     <box width="100%" height="100%" flexDirection="column" backgroundColor={theme.colors.background.primary}>
@@ -1746,7 +1734,8 @@ export function App({ cwd }: { cwd: string }) {
         branch={status.branch}
         ahead={status.ahead}
         behind={status.behind}
-        view={getViewName()}
+        view={view}
+        onViewChange={handleViewChange}
       />
       
       {view === 'main' && (
