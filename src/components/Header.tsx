@@ -1,13 +1,16 @@
 import { theme } from '../theme'
+import { Tabs } from './Tabs'
+import type { View } from '../types/git'
 
 interface HeaderProps {
   branch: string
   ahead: number
   behind: number
-  view: string
+  view: View
+  onViewChange: (view: View) => void
 }
 
-export function Header({ branch, ahead, behind, view }: HeaderProps) {
+export function Header({ branch, ahead, behind, view, onViewChange }: HeaderProps) {
   const aheadBehind = ahead > 0 || behind > 0
     ? ` [↑${ahead} ↓${behind}]`
     : ''
@@ -15,7 +18,7 @@ export function Header({ branch, ahead, behind, view }: HeaderProps) {
   return (
     <box
       width="100%"
-      height={3}
+      height={4}
       borderStyle={theme.borders.style}
       borderColor={theme.colors.border}
       padding={theme.spacing.none}
@@ -25,9 +28,8 @@ export function Header({ branch, ahead, behind, view }: HeaderProps) {
         <text fg={theme.colors.text.muted}> - </text>
         <text fg={theme.colors.git.modified}>{branch}</text>
         <text fg={theme.colors.text.muted}>{aheadBehind}</text>
-        <text fg={theme.colors.text.muted}> | View: </text>
-        <text fg={theme.colors.primary}>{view}</text>
       </box>
+      <Tabs activeView={view} onViewChange={onViewChange} />
     </box>
   )
 }
