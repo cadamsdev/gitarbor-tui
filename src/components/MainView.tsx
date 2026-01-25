@@ -354,9 +354,7 @@ export function MainView({
                       {isSelected ? '>' : ' '}
                     </text>
                     <text fg={theme.colors.git.modified}> {commit.shortHash} </text>
-                    <text fg={theme.colors.text.muted}>{commit.date}</text>
-                    <text fg={theme.colors.text.muted}> - </text>
-                    <text fg={theme.colors.status.info}>{commit.author}</text>
+                    <text fg={theme.colors.status.info}>{commit.author.slice(0, 2)}</text>
                     <text fg={theme.colors.text.muted}> - </text>
                     <text fg={isSelected ? theme.colors.text.primary : theme.colors.text.secondary}>
                       {commit.message}
