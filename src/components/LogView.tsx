@@ -18,7 +18,13 @@ export function LogView({ commits, selectedIndex, focused }: LogViewProps) {
     >
       <box paddingLeft={theme.spacing.xs} paddingTop={theme.spacing.none}>
         <text fg={theme.colors.text.primary}>Commit History</text>
-        <text> </text>
+      </box>
+      <scrollbox
+        width="100%"
+        flexGrow={1}
+        scrollY={true}
+        paddingLeft={theme.spacing.xs}
+      >
         {commits.length === 0 ? (
           <text fg={theme.colors.text.muted}>No commits</text>
         ) : (
@@ -42,7 +48,7 @@ export function LogView({ commits, selectedIndex, focused }: LogViewProps) {
             )
           })
         )}
-      </box>
+      </scrollbox>
     </box>
   )
 }
