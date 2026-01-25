@@ -1500,7 +1500,16 @@ export function App({ cwd }: { cwd: string }) {
         />
       )}
 
-      <Footer message={loading ? 'Loading...' : message} />
+      <Footer 
+        message={loading ? 'Loading...' : message}
+        view={view}
+        focusedPanel={focusedPanel}
+        hasStaged={status.staged.length > 0}
+        hasUnstaged={status.unstaged.length > 0}
+        hasUntracked={status.untracked.length > 0}
+        hasStashes={stashes.length > 0}
+        mergeInProgress={mergeState.inProgress}
+      />
 
       {showCommitModal && (
         <CommitModal
