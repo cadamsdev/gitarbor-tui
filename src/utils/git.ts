@@ -10,6 +10,10 @@ const execAsync = promisify(exec)
 export class GitClient {
   private commandLog: CommandLogEntry[] = []
   private readonly maxLogEntries = 100
+  private diffCache: Map<string, { content: string; timestamp: number }> = new Map()
+  private readonly diffCacheTTL = 5000 // 5 seconds cache
+  private statusCache: { data: GitStatus; timestamp: number } | null = null
+  private readonly statusCacheTTL = 1000 // 1 second cache for status
 
   constructor(private cwd: string) {}
 
@@ -51,8 +55,21 @@ export class GitClient {
     this.commandLog = []
   }
 
+  private invalidateDiffCache(): void {
+    this.diffCache.clear()
+  }
+
+  private invalidateStatusCache(): void {
+    this.statusCache = null
+  }
+
   async getStatus(): Promise<GitStatus> {
     try {
+      // Return cached status if still valid
+      if (this.statusCache && Date.now() - this.statusCache.timestamp < this.statusCacheTTL) {
+        return this.statusCache.data
+      }
+
       const { stdout: branchOut } = await execAsync('git branch --show-current', { cwd: this.cwd })
       const branch = branchOut.trim()
 
@@ -95,7 +112,12 @@ export class GitClient {
         }
       })
 
-      return { branch, ahead, behind, staged, unstaged, untracked }
+      const result = { branch, ahead, behind, staged, unstaged, untracked }
+      
+      // Cache the result
+      this.statusCache = { data: result, timestamp: Date.now() }
+      
+      return result
     } catch (error) {
       throw new Error(`Failed to get git status: ${error}`)
     }
@@ -153,23 +175,25 @@ export class GitClient {
           return branch
         })
 
-      // Try to get branch descriptions
-      for (const branch of branches) {
-        if (!branch.remote) {
-          try {
-            const { stdout: desc } = await execAsync(
-              `git config branch.${branch.name}.description`,
-              { cwd: this.cwd }
-            )
-            const trimmed = desc.trim()
-            if (trimmed.length > 0) {
-              branch.description = trimmed
-            }
-          } catch {
-            // No description set
+      // Get all branch descriptions in parallel instead of sequentially
+      const localBranches = branches.filter((b) => !b.remote)
+      const descriptionPromises = localBranches.map(async (branch) => {
+        try {
+          const { stdout: desc } = await execAsync(
+            `git config branch.${branch.name}.description`,
+            { cwd: this.cwd }
+          )
+          const trimmed = desc.trim()
+          if (trimmed.length > 0) {
+            branch.description = trimmed
           }
+        } catch {
+          // No description set
         }
-      }
+      })
+
+      // Wait for all descriptions in parallel
+      await Promise.all(descriptionPromises)
 
       return branches
     } catch (error) {
@@ -277,6 +301,8 @@ export class GitClient {
     await this.logCommand(`git add "${path}"`, async () => {
       try {
         await execAsync(`git add "${path}"`, { cwd: this.cwd })
+        this.invalidateDiffCache()
+        this.invalidateStatusCache()
       } catch (error) {
         throw new Error(`Failed to stage file: ${error}`)
       }
@@ -287,6 +313,8 @@ export class GitClient {
     await this.logCommand('git add -A', async () => {
       try {
         await execAsync('git add -A', { cwd: this.cwd })
+        this.invalidateDiffCache()
+        this.invalidateStatusCache()
       } catch (error) {
         throw new Error(`Failed to stage all files: ${error}`)
       }
@@ -297,6 +325,8 @@ export class GitClient {
     await this.logCommand(`git reset HEAD "${path}"`, async () => {
       try {
         await execAsync(`git reset HEAD "${path}"`, { cwd: this.cwd })
+        this.invalidateDiffCache()
+        this.invalidateStatusCache()
       } catch (error) {
         throw new Error(`Failed to unstage file: ${error}`)
       }
@@ -307,6 +337,8 @@ export class GitClient {
     await this.logCommand(`git commit -m "${message.replace(/"/g, '\\"')}"`, async () => {
       try {
         await execAsync(`git commit -m "${message.replace(/"/g, '\\"')}"`, { cwd: this.cwd })
+        this.invalidateDiffCache()
+        this.invalidateStatusCache()
       } catch (error) {
         throw new Error(`Failed to commit: ${error}`)
       }
@@ -326,8 +358,20 @@ export class GitClient {
 
   async getDiff(path?: string): Promise<string> {
     try {
+      const cacheKey = `diff:${path || 'all'}`
+      const cached = this.diffCache.get(cacheKey)
+      
+      // Return cached diff if still valid
+      if (cached && Date.now() - cached.timestamp < this.diffCacheTTL) {
+        return cached.content
+      }
+
       const pathArg = path ? `-- "${path}"` : ''
       const { stdout } = await execAsync(`git diff ${pathArg}`, { cwd: this.cwd })
+      
+      // Cache the result
+      this.diffCache.set(cacheKey, { content: stdout, timestamp: Date.now() })
+      
       return stdout
     } catch (error) {
       throw new Error(`Failed to get diff: ${error}`)
@@ -336,8 +380,20 @@ export class GitClient {
 
   async getStagedDiff(path?: string): Promise<string> {
     try {
+      const cacheKey = `staged-diff:${path || 'all'}`
+      const cached = this.diffCache.get(cacheKey)
+      
+      // Return cached diff if still valid
+      if (cached && Date.now() - cached.timestamp < this.diffCacheTTL) {
+        return cached.content
+      }
+
       const pathArg = path ? `-- "${path}"` : ''
       const { stdout } = await execAsync(`git diff --staged ${pathArg}`, { cwd: this.cwd })
+      
+      // Cache the result
+      this.diffCache.set(cacheKey, { content: stdout, timestamp: Date.now() })
+      
       return stdout
     } catch (error) {
       throw new Error(`Failed to get staged diff: ${error}`)
@@ -593,6 +649,8 @@ export class GitClient {
     await this.logCommand('git reset HEAD', async () => {
       try {
         await execAsync('git reset HEAD', { cwd: this.cwd })
+        this.invalidateDiffCache()
+        this.invalidateStatusCache()
       } catch (error) {
         throw new Error(`Failed to unstage all files: ${error}`)
       }

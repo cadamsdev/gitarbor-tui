@@ -201,15 +201,20 @@ export function App({ cwd }: { cwd: string }) {
     // Update immediately
     updateCommandLog()
     
-    // Update every 500ms to catch new commands
-    const interval = setInterval(updateCommandLog, 500)
+    // Update every 2 seconds instead of 500ms to reduce overhead
+    const interval = setInterval(updateCommandLog, 2000)
     
     return () => clearInterval(interval)
   }, [git])
 
   useEffect(() => {
     if (view === 'diff' || (view === 'main' && focusedPanel === 'status')) {
-      void loadDiff()
+      // Debounce diff loading to prevent excessive regeneration during rapid navigation
+      const timer = setTimeout(() => {
+        void loadDiff()
+      }, 100)
+      
+      return () => clearTimeout(timer)
     }
   }, [view, focusedPanel, selectedIndex, loadDiff])
 
