@@ -145,9 +145,9 @@ export class GitClient {
 
   async getBranches(): Promise<GitBranch[]> {
     try {
-      // Get branch list with verbose info
+      // Get local branches only (removed -a flag for performance)
       const { stdout } = await execAsync(
-        'git branch -a -vv --format="%(refname:short)|%(upstream:short)|%(authordate:relative)|%(HEAD)"',
+        'git branch -vv --format="%(refname:short)|%(upstream:short)|%(authordate:relative)|%(HEAD)"',
         { cwd: this.cwd }
       )
       
@@ -156,13 +156,12 @@ export class GitClient {
         .filter((line) => line)
         .map((line) => {
           const [name, upstream, date, head] = line.split('|')
-          const remote = name!.startsWith('remotes/')
           const current = head === '*'
           
           const branch: GitBranch = {
             name: name!,
             current,
-            remote,
+            remote: false,
           }
           
           if (upstream) {
@@ -175,9 +174,8 @@ export class GitClient {
           return branch
         })
 
-      // Get all branch descriptions in parallel instead of sequentially
-      const localBranches = branches.filter((b) => !b.remote)
-      const descriptionPromises = localBranches.map(async (branch) => {
+      // Get all branch descriptions in parallel
+      const descriptionPromises = branches.map(async (branch) => {
         try {
           const { stdout: desc } = await execAsync(
             `git config branch.${branch.name}.description`,

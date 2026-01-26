@@ -295,9 +295,6 @@ export function MainView({
                           {branch.current ? '* ' : '  '}
                           {branch.name}
                         </text>
-                        {branch.upstream && (
-                          <text fg={theme.colors.text.muted}> → {branch.upstream.replace('remotes/', '')}</text>
-                        )}
                       </box>
                     )
                   })
