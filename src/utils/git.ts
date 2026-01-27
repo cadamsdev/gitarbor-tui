@@ -127,7 +127,7 @@ export class GitClient {
     try {
       const format = '%H%x00%h%x00%an%x00%ar%x00%s'
       const { stdout } = await execAsync(
-        `git log -n ${count} --pretty=format:"${format}"`,
+        `git log -n ${count} --pretty=format:"${format}" --abbrev=7`,
         { cwd: this.cwd }
       )
 

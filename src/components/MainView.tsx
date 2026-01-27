@@ -417,20 +417,25 @@ export function MainView({
               <text fg={theme.colors.text.muted}>No commits</text>
             </box>
           ) : (
-            <scrollbox ref={commitsScrollRef} width="100%" height="100%" flexDirection="column">
+            <scrollbox ref={commitsScrollRef} width="100%" height="100%" flexDirection="column" viewportCulling={true}>
               {commits.map((commit, idx) => {
                 const isSelected = idx === selectedIndex && focusedPanel === 'log'
+                const authorInitials = commit.author.slice(0, 2)
+                // Truncate message if it's too long (estimate ~30 chars available)
+                const maxMessageLength = 35
+                const displayMessage = commit.message.length > maxMessageLength 
+                  ? commit.message.substring(0, maxMessageLength - 3) + '...'
+                  : commit.message
                 
                 return (
-                  <box key={commit.hash} flexDirection="row" paddingLeft={theme.spacing.xs}>
+                  <box key={commit.hash} flexDirection="row" paddingLeft={theme.spacing.xs} height={1}>
                     <text fg={isSelected ? theme.colors.primary : theme.colors.border}>
                       {isSelected ? '>' : ' '}
                     </text>
-                    <text fg={theme.colors.git.modified}> {commit.shortHash} </text>
-                    <text fg={theme.colors.status.info}>{commit.author.slice(0, 2)}</text>
-                    <text fg={theme.colors.text.muted}> - </text>
+                    <text fg={theme.colors.git.modified}> {commit.shortHash.padEnd(7)} </text>
+                    <text fg={theme.colors.status.info}>{authorInitials.padEnd(3)}</text>
                     <text fg={isSelected ? theme.colors.text.primary : theme.colors.text.secondary}>
-                      {commit.message}
+                      {displayMessage}
                     </text>
                   </box>
                 )
