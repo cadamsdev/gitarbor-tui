@@ -2,13 +2,13 @@ import { theme } from '../theme'
 import { Fieldset } from './Fieldset'
 import type { GitCommit } from '../types/git'
 
-interface LogViewProps {
+interface HistoryViewProps {
   commits: GitCommit[]
   selectedIndex: number
   focused: boolean
 }
 
-export function LogView({ commits, selectedIndex, focused }: LogViewProps) {
+export function HistoryView({ commits, selectedIndex, focused }: HistoryViewProps) {
   return (
     <Fieldset
       title="Commit History"

@@ -6,7 +6,7 @@ import { FileSystemWatcher } from './utils/watcher'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
 import { MainView } from './components/MainView'
-import { LogView } from './components/LogView'
+import { HistoryView } from './components/HistoryView'
 import { DiffView } from './components/DiffView'
 import { CommitModal } from './components/CommitModal'
 import { ExitModal } from './components/ExitModal'
@@ -2120,7 +2120,7 @@ export function App({ cwd }: { cwd: string }) {
       )}
 
       {view === 'log' && (
-        <LogView
+        <HistoryView
           commits={commits}
           selectedIndex={selectedIndex}
           focused={!showCommitModal}
