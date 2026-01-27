@@ -621,10 +621,31 @@ export function getThemeIds(): string[] {
 let currentTheme: Theme = defaultDarkTheme
 
 /**
+ * Theme change listeners
+ */
+const themeChangeListeners: Array<() => void> = []
+
+/**
+ * Subscribe to theme changes
+ */
+export function onThemeChange(listener: () => void): () => void {
+  themeChangeListeners.push(listener)
+  // Return unsubscribe function
+  return () => {
+    const index = themeChangeListeners.indexOf(listener)
+    if (index !== -1) {
+      themeChangeListeners.splice(index, 1)
+    }
+  }
+}
+
+/**
  * Set the active theme
  */
 export function setTheme(themeId: string): void {
   currentTheme = getTheme(themeId)
+  // Notify all listeners
+  themeChangeListeners.forEach(listener => listener())
 }
 
 /**

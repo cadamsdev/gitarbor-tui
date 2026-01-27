@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { homedir } from 'os'
 import { readFile, writeFile } from 'fs/promises'
-import { theme, themes, getThemeIds, setTheme } from '../theme'
+import { theme, themes, getThemeIds, setTheme, onThemeChange } from '../theme'
 import { Modal } from './Modal'
 
 const CONFIG_PATH = `${homedir()}/.gitarborrc`
@@ -17,6 +17,15 @@ export function ThemesModal({ onClose }: ThemesModalProps) {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const [, forceUpdate] = useState({})
+
+  // Listen for theme changes and force re-render
+  useEffect(() => {
+    const unsubscribe = onThemeChange(() => {
+      forceUpdate({}) // Trigger re-render when theme changes
+    })
+    return unsubscribe
+  }, [])
 
   useEffect(() => {
     async function loadThemePreference() {
@@ -41,15 +50,19 @@ export function ThemesModal({ onClose }: ThemesModalProps) {
   }, [])
 
   const handleApplyTheme = async () => {
-    try {
-      setSaving(true)
-      setError('')
-      
-      const themeIds = getThemeIds()
-      const themeId = themeIds[selectedThemeIndex]
-      if (!themeId) return
+    const themeIds = getThemeIds()
+    const themeId = themeIds[selectedThemeIndex]
+    if (!themeId) return
 
-      // Save to config file
+    // Apply theme immediately (synchronous - no delay!)
+    setTheme(themeId)
+    setCurrentThemeId(themeId)
+    
+    // Save to config file in the background
+    setSaving(true)
+    setError('')
+    
+    try {
       let configData: { theme?: string } = {}
       try {
         const existingConfig = await readFile(CONFIG_PATH, 'utf-8')
@@ -60,10 +73,6 @@ export function ThemesModal({ onClose }: ThemesModalProps) {
 
       configData.theme = themeId
       await writeFile(CONFIG_PATH, JSON.stringify(configData, null, 2))
-
-      // Apply theme immediately
-      setTheme(themeId)
-      setCurrentThemeId(themeId)
     } catch (err) {
       setError('Failed to save theme preference')
     } finally {

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useKeyboard, useRenderer } from '@opentui/react'
-import { theme } from './theme'
+import { theme, onThemeChange } from './theme'
 import { GitClient } from './utils/git'
 import { FileSystemWatcher } from './utils/watcher'
 import { Header } from './components/Header'
@@ -97,6 +97,15 @@ export function App({ cwd }: { cwd: string }) {
   const [selectedCommitForAction, setSelectedCommitForAction] = useState<GitCommit | null>(null)
   const [commandLog, setCommandLog] = useState<CommandLogEntry[]>([])
   const [showCommandLog, setShowCommandLog] = useState(true)
+  const [, forceUpdate] = useState({})
+
+  // Listen for theme changes and force re-render
+  useEffect(() => {
+    const unsubscribe = onThemeChange(() => {
+      forceUpdate({}) // Trigger re-render when theme changes
+    })
+    return unsubscribe
+  }, [])
 
   // Clean exit handler
   const handleExit = useCallback(() => {
