@@ -590,13 +590,13 @@ export class GitClient {
   }
 
   async createStash(message?: string): Promise<void> {
-    const cmd = message ? `git stash push -m "${message.replace(/"/g, '\\"')}"` : 'git stash push'
+    const cmd = message ? `git stash push -u -m "${message.replace(/"/g, '\\"')}"` : 'git stash push -u'
     await this.logCommand(cmd, async () => {
       try {
         if (message) {
-          await execAsync(`git stash push -m "${message.replace(/"/g, '\\"')}"`, { cwd: this.cwd })
+          await execAsync(`git stash push -u -m "${message.replace(/"/g, '\\"')}"`, { cwd: this.cwd })
         } else {
-          await execAsync('git stash push', { cwd: this.cwd })
+          await execAsync('git stash push -u', { cwd: this.cwd })
         }
       } catch (error) {
         throw new Error(`Failed to create stash: ${error}`)
