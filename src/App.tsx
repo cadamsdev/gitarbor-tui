@@ -1862,9 +1862,17 @@ export function App({ cwd }: { cwd: string }) {
     // 'd' key to discard changes to unstaged files
     if (key.sequence === 'd') {
       if (view === 'main' && focusedPanel === 'status') {
-        const file = status.unstaged[selectedIndex]
-        if (file) {
+        const allFiles = [...status.staged, ...status.unstaged, ...status.untracked]
+        const file = allFiles[selectedIndex]
+        // Only allow discarding unstaged (modified) files, not staged or untracked
+        if (file && !file.staged && file.status !== '??') {
           handleDiscardWithConfirm(file.path)
+        } else if (file?.staged) {
+          setMessage('Cannot discard staged file (unstage it first)')
+        } else if (file?.status === '??') {
+          setMessage('Use Shift+D to delete untracked files')
+        } else {
+          setMessage('No unstaged file selected')
         }
       }
     }
