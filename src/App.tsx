@@ -1064,7 +1064,7 @@ export function App({ cwd }: { cwd: string }) {
       label: 'Unstage All Changes',
       description: 'Unstage all staged files',
       shortcut: 'A',
-      execute: () => handleUnstageAllWithConfirm(),
+      execute: () => void handleUnstageAll(),
     },
     {
       id: 'view-main',
@@ -2139,7 +2139,7 @@ export function App({ cwd }: { cwd: string }) {
 
     // 'A' key (shift+a) to unstage all
     if (key.sequence === 'A') {
-      handleUnstageAllWithConfirm()
+      void handleUnstageAll()
     }
 
     // 's' key to create stash
