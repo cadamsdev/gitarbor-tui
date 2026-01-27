@@ -888,7 +888,7 @@ export function App({ cwd }: { cwd: string }) {
         } else if (focusedPanel === 'branches') {
           return branches.filter((b) => !b.remote).length - 1
         } else if (focusedPanel === 'stashes') {
-          return Math.min(stashes.length - 1, 2) // Only show first 3 stashes in sidebar
+          return stashes.length - 1 // All stashes are now scrollable
         } else if (focusedPanel === 'remotes') {
           return remotes.length - 1
         } else if (focusedPanel === 'tags') {
