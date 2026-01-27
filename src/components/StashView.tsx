@@ -16,13 +16,8 @@ export function StashView({ stashes, selectedIndex, focused }: StashViewProps) {
       borderColor={focused ? theme.colors.borderFocused : theme.colors.border}
       padding={theme.spacing.none}
     >
-      <box paddingLeft={theme.spacing.xs} paddingTop={theme.spacing.none}>
+      <box paddingLeft={theme.spacing.xs} paddingTop={theme.spacing.none} flexDirection="column">
         <text fg={theme.colors.text.primary}>Stash List</text>
-        <text> </text>
-        <text fg={theme.colors.text.muted}>
-          Press Enter to apply, Shift+P to pop, Shift+D to drop, Shift+V to view diff
-        </text>
-        <text> </text>
         {stashes.length === 0 ? (
           <text fg={theme.colors.text.muted}>No stashes saved</text>
         ) : (
