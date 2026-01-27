@@ -1,4 +1,5 @@
 import { theme } from '../theme'
+import { Fieldset } from './Fieldset'
 import type { GitRemote } from '../types/git'
 
 interface RemotesViewProps {
@@ -9,24 +10,14 @@ interface RemotesViewProps {
 
 export function RemotesView({ remotes, selectedIndex, focused }: RemotesViewProps) {
   return (
-    <box
-      width="100%"
-      height="100%"
-      flexDirection="column"
-      borderStyle={theme.borders.style}
-      borderColor={focused ? theme.colors.borderFocused : theme.colors.border}
+    <Fieldset
+      title={`Remotes (${remotes.length})`}
+      focused={focused}
+      flexGrow={1}
+      paddingX={theme.spacing.xs}
+      paddingY={theme.spacing.xs}
     >
-      <box
-        width="100%"
-        height={1}
-        paddingLeft={theme.spacing.xs}
-        borderStyle={theme.borders.style}
-        borderColor={theme.colors.border}
-      >
-        <text fg={theme.colors.primary}>Remotes ({remotes.length})</text>
-      </box>
-
-      <box width="100%" flexGrow={1} flexDirection="column" paddingLeft={theme.spacing.xs} paddingTop={theme.spacing.xs}>
+      <box width="100%" flexDirection="column">
         {remotes.length === 0 ? (
           <text fg={theme.colors.text.muted}>No remotes configured</text>
         ) : (
@@ -56,6 +47,6 @@ export function RemotesView({ remotes, selectedIndex, focused }: RemotesViewProp
           })
         )}
       </box>
-    </box>
+    </Fieldset>
   )
 }
