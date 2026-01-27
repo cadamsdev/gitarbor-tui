@@ -1,4 +1,5 @@
 import { theme } from '../theme'
+import { Fieldset } from './Fieldset'
 import type { GitCommit } from '../types/git'
 
 interface LogViewProps {
@@ -9,16 +10,13 @@ interface LogViewProps {
 
 export function LogView({ commits, selectedIndex, focused }: LogViewProps) {
   return (
-    <box
-      width="100%"
+    <Fieldset
+      title="Commit History"
+      focused={focused}
       flexGrow={1}
-      borderStyle={theme.borders.style}
-      borderColor={focused ? theme.colors.borderFocused : theme.colors.border}
-      padding={theme.spacing.none}
+      paddingX={theme.spacing.none}
+      paddingY={theme.spacing.none}
     >
-      <box paddingLeft={theme.spacing.xs} paddingTop={theme.spacing.none}>
-        <text fg={theme.colors.text.primary}>Commit History</text>
-      </box>
       <scrollbox
         width="100%"
         flexGrow={1}
@@ -49,6 +47,6 @@ export function LogView({ commits, selectedIndex, focused }: LogViewProps) {
           })
         )}
       </scrollbox>
-    </box>
+    </Fieldset>
   )
 }
