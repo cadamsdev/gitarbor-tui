@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { useKeyboard } from '@opentui/react'
 import { theme } from '../theme'
+import { Modal } from './Modal'
 import type { GitRemote } from '../types/git'
 
 interface RemoteModalProps {
@@ -74,24 +75,11 @@ export function RemoteModal({ mode, existingRemote, onSubmit, onCancel }: Remote
   const title = mode === 'add' ? 'Add Remote' : 'Edit Remote'
 
   return (
-    <box
-      style={{
-        position: 'absolute',
-        left: 10,
-        top: 3,
-        zIndex: 1000,
-      }}
+    <Modal
       width={80}
       height={16}
-      flexDirection="column"
-      borderStyle="double"
-      borderColor={theme.colors.primary}
-      backgroundColor={theme.colors.background.modal}
-      padding={theme.spacing.xs}
+      title={title}
     >
-      <text fg={theme.colors.primary}>{title}</text>
-      <text> </text>
-
       <box width="100%" flexGrow={1} flexDirection="column">
         <box width="100%" height={2} flexDirection="column" paddingBottom={theme.spacing.xs}>
           <box width="100%">
@@ -150,6 +138,6 @@ export function RemoteModal({ mode, existingRemote, onSubmit, onCancel }: Remote
           {editMode ? 'Enter: save field  Esc: cancel edit' : 'Tab: next  e/Space: edit  Enter: submit  Esc: cancel'}
         </text>
       </box>
-    </box>
+    </Modal>
   )
 }
