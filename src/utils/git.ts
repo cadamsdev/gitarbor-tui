@@ -88,7 +88,7 @@ export class GitClient {
         // No upstream branch
       }
 
-      const { stdout: statusOut } = await execAsync('git status --porcelain', { cwd: this.cwd })
+      const { stdout: statusOut } = await execAsync('git status --porcelain -uall', { cwd: this.cwd })
       
       const staged: GitFile[] = []
       const unstaged: GitFile[] = []

@@ -4,6 +4,7 @@ import { theme } from '../theme'
 import type { GitFile, GitBranch, GitCommit, GitMergeState, GitStash, GitRemote, GitTag, CommandLogEntry } from '../types/git'
 import { Fieldset } from './Fieldset'
 import { CommandLogView } from './CommandLogView'
+import { WorkingDirectoryList } from './WorkingDirectoryList'
 
 interface MainViewProps {
   staged: GitFile[]
@@ -86,6 +87,7 @@ export function MainView({
     let scrollRef: typeof branchesScrollRef | null = null
     let itemHeight = lineHeight
     
+    // Status panel handles its own scrolling via WorkingDirectoryList component
     if (focusedPanel === 'branches' && branchRemoteTab === 'branches') {
       scrollRef = branchesScrollRef
       itemHeight = lineHeight
@@ -148,29 +150,8 @@ export function MainView({
     ...untracked.map((f) => ({ ...f, section: 'untracked' })),
   ]
 
-  const getStatusSymbol = (status: string, section: string) => {
-    if (section === 'staged') return '✓'
-    if (section === 'untracked') return '?'
-    switch (status) {
-      case 'M': return '~'
-      case 'D': return '-'
-      case 'A': return '+'
-      default: return '•'
-    }
-  }
-
-  const getSectionColor = (section: string) => {
-    if (section === 'staged') return theme.colors.git.staged
-    if (section === 'untracked') return theme.colors.text.muted
-    return theme.colors.git.modified
-  }
-
   const localBranches = branches.filter((b) => !b.remote)
   const remoteBranches = branches.filter((b) => b.remote)
-
-  const stagedFiles = staged.map((f) => ({ ...f, section: 'staged' }))
-  const unstagedFiles = unstaged.map((f) => ({ ...f, section: 'unstaged' }))
-  const untrackedFiles = untracked.map((f) => ({ ...f, section: 'untracked' }))
 
   return (
     <box width="100%" flexGrow={1} flexDirection="column">
@@ -181,117 +162,15 @@ export function MainView({
           title="Working Directory (w)"
           focused={focusedPanel === 'status'}
           flexGrow={1}
-          paddingX={theme.spacing.xs}
+          paddingX={theme.spacing.none}
           paddingY={theme.spacing.none}
         >
-          <box flexDirection="column">
-            {mergeState?.inProgress && (
-              <box
-                borderStyle={theme.borders.style}
-                borderColor={theme.colors.status.warning}
-                padding={theme.spacing.xs}
-                marginBottom={theme.spacing.xs}
-              >
-                <text fg={theme.colors.status.warning}>⚠ MERGE IN PROGRESS</text>
-                <text> </text>
-                {mergeState.mergingBranch && (
-                  <text fg={theme.colors.text.secondary}>
-                    Merging '{mergeState.mergingBranch}' into '{mergeState.currentBranch}'
-                  </text>
-                )}
-                <text> </text>
-                {mergeState.conflicts.length > 0 && (
-                  <text fg={theme.colors.status.error}>
-                    {mergeState.conflicts.length} conflict{mergeState.conflicts.length !== 1 ? 's' : ''} - Press 'C' to resolve
-                  </text>
-                )}
-                {mergeState.conflicts.length === 0 && (
-                  <text fg={theme.colors.git.staged}>All conflicts resolved - ready to commit</text>
-                )}
-              </box>
-            )}
-            
-            {/* Staged files section */}
-            {stagedFiles.length > 0 && (
-              <>
-                <text fg={theme.colors.git.staged}>Staged ({stagedFiles.length}):</text>
-                {stagedFiles.map((file, idx) => {
-                  const isSelected = idx === selectedIndex && focusedPanel === 'status'
-                  const symbol = getStatusSymbol(file.status, file.section)
-                  const color = getSectionColor(file.section)
-                  
-                  return (
-                    <box key={file.path} flexDirection="row">
-                      <text fg={isSelected ? theme.colors.primary : theme.colors.border}>
-                        {isSelected ? '>' : ' '}
-                      </text>
-                      <text fg={color}> {symbol} </text>
-                      <text fg={isSelected ? theme.colors.text.primary : theme.colors.text.secondary}>
-                        {file.path}
-                      </text>
-                    </box>
-                  )
-                })}
-                <text> </text>
-              </>
-            )}
-
-            {/* Unstaged files section */}
-            {unstagedFiles.length > 0 && (
-              <>
-                <text fg={theme.colors.git.modified}>Modified ({unstagedFiles.length}):</text>
-                {unstagedFiles.map((file, idx) => {
-                  const globalIdx = stagedFiles.length + idx
-                  const isSelected = globalIdx === selectedIndex && focusedPanel === 'status'
-                  const symbol = getStatusSymbol(file.status, file.section)
-                  const color = getSectionColor(file.section)
-                  
-                  return (
-                    <box key={file.path} flexDirection="row">
-                      <text fg={isSelected ? theme.colors.primary : theme.colors.border}>
-                        {isSelected ? '>' : ' '}
-                      </text>
-                      <text fg={color}> {symbol} </text>
-                      <text fg={isSelected ? theme.colors.text.primary : theme.colors.text.secondary}>
-                        {file.path}
-                      </text>
-                    </box>
-                  )
-                })}
-                <text> </text>
-              </>
-            )}
-
-            {/* Untracked files section */}
-            {untrackedFiles.length > 0 && (
-              <>
-                <text fg={theme.colors.text.muted}>Untracked ({untrackedFiles.length}):</text>
-                {untrackedFiles.map((file, idx) => {
-                  const globalIdx = stagedFiles.length + unstagedFiles.length + idx
-                  const isSelected = globalIdx === selectedIndex && focusedPanel === 'status'
-                  const symbol = getStatusSymbol(file.status, file.section)
-                  const color = getSectionColor(file.section)
-                  
-                  return (
-                    <box key={file.path} flexDirection="row">
-                      <text fg={isSelected ? theme.colors.primary : theme.colors.border}>
-                        {isSelected ? '>' : ' '}
-                      </text>
-                      <text fg={color}> {symbol} </text>
-                      <text fg={isSelected ? theme.colors.text.primary : theme.colors.text.secondary}>
-                        {file.path}
-                      </text>
-                    </box>
-                  )
-                })}
-              </>
-            )}
-
-            {/* Empty state */}
-            {stagedFiles.length === 0 && unstagedFiles.length === 0 && untrackedFiles.length === 0 && (
-              <text fg={theme.colors.text.muted}>Working directory clean</text>
-            )}
-          </box>
+          <WorkingDirectoryList
+            allFiles={allFiles}
+            selectedIndex={selectedIndex}
+            isFocused={focusedPanel === 'status'}
+            mergeState={mergeState}
+          />
         </Fieldset>
 
         <Fieldset
