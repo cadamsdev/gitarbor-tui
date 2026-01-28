@@ -398,6 +398,37 @@ export class GitClient {
     }
   }
 
+  async getUntrackedDiff(path: string): Promise<string> {
+    const cacheKey = `untracked-diff:${path}`
+    try {
+      const cached = this.diffCache.get(cacheKey)
+      
+      // Return cached diff if still valid
+      if (cached && Date.now() - cached.timestamp < this.diffCacheTTL) {
+        return cached.content
+      }
+
+      // Use git diff to show untracked file as if it were added
+      // This shows the file content with proper diff formatting
+      const { stdout } = await execAsync(`git diff --no-index /dev/null "${path}"`, { cwd: this.cwd })
+      
+      // Cache the result
+      this.diffCache.set(cacheKey, { content: stdout, timestamp: Date.now() })
+      
+      return stdout
+    } catch (error) {
+      // git diff --no-index exits with code 1 when there are differences, which is expected
+      // Extract the stdout from the error if available
+      const execError = error as { stdout?: string; stderr?: string; code?: number }
+      if (execError.code === 1 && execError.stdout) {
+        // Cache the result
+        this.diffCache.set(cacheKey, { content: execError.stdout, timestamp: Date.now() })
+        return execError.stdout
+      }
+      throw new Error(`Failed to get untracked file diff: ${error}`)
+    }
+  }
+
   async push(onProgress?: (line: string) => void): Promise<void> {
     await this.logCommand('git push --progress', async () => {
       try {

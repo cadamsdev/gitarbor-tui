@@ -266,13 +266,19 @@ export function App({ cwd }: { cwd: string }) {
     try {
       if (view === 'main' && focusedPanel === 'status') {
         // Load diff for selected file in status panel
-        const allFiles = [...status.staged, ...status.unstaged]
+        const allFiles = [...status.staged, ...status.unstaged, ...status.untracked]
         if (allFiles.length > 0 && selectedIndex < allFiles.length) {
           const file = allFiles[selectedIndex]
           if (file) {
-            const diffContent = file.staged
-              ? await git.getStagedDiff(file.path)
-              : await git.getDiff(file.path)
+            let diffContent: string
+            if (file.status === 'untracked') {
+              // For untracked files, show the file content as a diff
+              diffContent = await git.getUntrackedDiff(file.path)
+            } else if (file.staged) {
+              diffContent = await git.getStagedDiff(file.path)
+            } else {
+              diffContent = await git.getDiff(file.path)
+            }
             setDiff(diffContent)
             setSelectedFilePath(file.path)
           }
