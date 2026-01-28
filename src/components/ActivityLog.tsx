@@ -1,4 +1,5 @@
 import { theme } from '../theme'
+import { Fieldset } from './Fieldset'
 import type { ActivityLogEntry } from '../types/git'
 
 interface ActivityLogProps {
@@ -44,20 +45,12 @@ export function ActivityLog({ activityLog, maxHeight = 10 }: ActivityLogProps) {
   }
 
   return (
-    <box
-      width="100%"
+    <Fieldset
+      title="Activity Log (commands, errors, warnings)"
       height={maxHeight + 3}
-      borderStyle={theme.borders.style}
-      borderColor={theme.colors.border}
-      padding={theme.spacing.none}
-      flexDirection="column"
+      width="100%"
     >
-      <box paddingLeft={theme.spacing.xs} paddingTop={theme.spacing.none}>
-        <text fg={theme.colors.text.primary}>Activity Log</text>
-        <text fg={theme.colors.text.muted}> (commands, errors, warnings)</text>
-      </box>
-      
-      <box flexDirection="column" paddingLeft={theme.spacing.xs}>
+      <box flexDirection="column">
         {displayEntries.length === 0 ? (
           <text fg={theme.colors.text.muted}>No activity yet</text>
         ) : (
@@ -96,6 +89,6 @@ export function ActivityLog({ activityLog, maxHeight = 10 }: ActivityLogProps) {
           ))
         )}
       </box>
-    </box>
+    </Fieldset>
   )
 }
