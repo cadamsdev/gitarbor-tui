@@ -18,15 +18,22 @@ export function WorkingDirectoryList({
 }: WorkingDirectoryListProps) {
   const scrollRef = useRef<ScrollBoxRenderable>(null)
 
-  const getStatusPrefix = (section: string) => {
-    if (section === 'staged') return 'A'
-    if (section === 'untracked') return 'U'
+  const getStatusPrefix = (file: GitFile & { section: string }) => {
+    // Check actual git status first
+    if (file.status === 'D') return 'D'
+    if (file.status === 'A') return 'A'
+    
+    // Fall back to section-based logic
+    if (file.section === 'untracked') return 'U'
     return 'M'
   }
 
-  const getSectionColor = (section: string) => {
+  const getSectionColor = (section: string, status: string) => {
+    // Prioritize section color (staged files should always be green)
     if (section === 'staged') return theme.colors.git.staged
     if (section === 'untracked') return theme.colors.text.muted
+    // Only show deleted color for unstaged deleted files
+    if (status === 'D') return theme.colors.git.deleted
     return theme.colors.git.modified
   }
 
@@ -77,8 +84,8 @@ export function WorkingDirectoryList({
         <scrollbox ref={scrollRef} width="100%" height="100%" viewportCulling={true}>
           {allFiles.map((file, idx) => {
             const isSelected = idx === selectedIndex && isFocused
-            const prefix = getStatusPrefix(file.section)
-            const color = getSectionColor(file.section)
+            const prefix = getStatusPrefix(file)
+            const color = getSectionColor(file.section, file.status)
             
             return (
               <box key={file.path} flexDirection="row" paddingLeft={theme.spacing.xs} height={1}>
