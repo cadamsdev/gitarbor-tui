@@ -24,7 +24,7 @@ export function StashSelector({
     <Fieldset
       title="Stashes (h)"
       focused={focused}
-      height={5}
+      height={4}
       paddingX={theme.spacing.none}
       paddingY={theme.spacing.none}
     >
