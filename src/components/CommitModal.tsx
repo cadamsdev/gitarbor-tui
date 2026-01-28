@@ -3,6 +3,7 @@ import { useKeyboard } from '@opentui/react';
 import { theme } from '../theme';
 import { Modal } from './Modal';
 import { Input } from './Input';
+import { Fieldset } from './Fieldset';
 
 interface CommitModalProps {
   onCommit: (message: string) => void;
@@ -45,12 +46,6 @@ export function CommitModal({ onCommit, onCancel }: CommitModalProps) {
   });
 
   const subjectLength = subject.length;
-  const subjectColor =
-    subjectLength > 50
-      ? theme.colors.status.warning
-      : subjectLength > 72
-        ? theme.colors.status.error
-        : theme.colors.text.muted;
 
   // Preview formatted commit message
   const previewMessage = body.trim() ? `${subject.trim()}\n\n${body.trim()}` : subject.trim();
@@ -92,33 +87,36 @@ export function CommitModal({ onCommit, onCancel }: CommitModalProps) {
   return (
     <Modal width={80} height={20} title="Create Commit">
       {/* Subject line */}
-      <box flexDirection="row">
-        <text fg={theme.colors.text.muted} width={10}>
-          Subject:
-        </text>
-        <text fg={subjectColor}>({subjectLength}/50)</text>
-      </box>
-      <Input
-        width={76}
-        placeholder="Brief description (50 chars recommended)"
-        value={subject}
-        onInput={(value) => setSubject(value)}
-        onSubmit={handleSubmit}
+      <Fieldset
+        title={`Subject (${subjectLength}/50)`}
         focused={focusedField === 'subject'}
-      />
+      >
+        <Input
+          width={72}
+          placeholder="Brief description (50 chars recommended)"
+          value={subject}
+          onInput={(value) => setSubject(value)}
+          onSubmit={handleSubmit}
+          focused={focusedField === 'subject'}
+        />
+      </Fieldset>
 
       <text> </text>
 
       {/* Body */}
-      <text fg={theme.colors.text.muted}>Body (optional):</text>
-      <Input
-        width={76}
-        placeholder="Detailed explanation (press Tab to switch fields)"
-        value={body}
-        onInput={(value) => setBody(value)}
-        onSubmit={handleSubmit}
+      <Fieldset
+        title="Body (optional)"
         focused={focusedField === 'body'}
-      />
+      >
+        <Input
+          width={72}
+          placeholder="Detailed explanation (press Tab to switch fields)"
+          value={body}
+          onInput={(value) => setBody(value)}
+          onSubmit={handleSubmit}
+          focused={focusedField === 'body'}
+        />
+      </Fieldset>
 
       <text> </text>
 
