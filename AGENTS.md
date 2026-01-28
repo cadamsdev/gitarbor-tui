@@ -146,6 +146,7 @@ export function ComponentName({ prop1, prop2 }: ComponentProps) {
 Use OpenTUI's primitive components:
 - `<box>` - Container with flexbox layout
 - `<text>` - Text rendering with color support
+- `<scrollbox>` - Scrollable container (see Scrollbox Pattern below)
 
 Common props:
 ```typescript
@@ -161,6 +162,45 @@ Common props:
 >
   <text fg="#FFFFFF">Text content</text>
 </box>
+```
+
+#### Scrollbox Pattern
+Use `<scrollbox>` for scrollable content with many items:
+
+**IMPORTANT**: Do NOT add `flexDirection` prop to `<scrollbox>` - it breaks scrolling behavior.
+
+```typescript
+import { useRef, useEffect } from 'react'
+import { ScrollBoxRenderable } from '@opentui/core'
+
+export function MyComponent() {
+  const scrollRef = useRef<ScrollBoxRenderable>(null)
+  const [selectedIndex, setSelectedIndex] = useState(0)
+
+  // Auto-scroll to selected item
+  useEffect(() => {
+    if (!scrollRef.current) return
+    const itemHeight = 1
+    const scrollPosition = Math.max(0, selectedIndex * itemHeight - 2)
+    scrollRef.current.scrollTo({ x: 0, y: scrollPosition })
+  }, [selectedIndex])
+
+  return (
+    <scrollbox
+      ref={scrollRef}
+      width="100%"
+      height={10}
+      viewportCulling={true}
+      // ❌ DO NOT add flexDirection="column" - it breaks scrolling
+    >
+      {items.map((item, idx) => (
+        <box key={item.id} flexDirection="row" height={1}>
+          <text>{item.name}</text>
+        </box>
+      ))}
+    </scrollbox>
+  )
+}
 ```
 
 ### Theme System

@@ -1666,7 +1666,7 @@ export function App({ cwd }: { cwd: string }) {
       },
     },
     {
-      id: 'create-tag',
+      id: 'create-tag-commit',
       label: 'Create Tag',
       description: 'Create a tag at selected commit',
       shortcut: 't (in log view)',
@@ -1735,7 +1735,7 @@ export function App({ cwd }: { cwd: string }) {
       },
     },
     {
-      id: 'create-tag',
+      id: 'create-tag-head',
       label: 'Create Tag',
       description: 'Create a new tag at selected commit or HEAD',
       shortcut: 'n / t (in tags panel)',
