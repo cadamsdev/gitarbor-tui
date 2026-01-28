@@ -31,6 +31,7 @@ import { TagDetailsView } from './components/TagDetailsView'
 import { ActivityLog } from './components/ActivityLog'
 import { ReposView } from './components/ReposView'
 import { RepoSwitchModal } from './components/RepoSwitchModal'
+import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal'
 import { WorkspaceManager } from './utils/workspace'
 import type { Repository } from './types/workspace'
 import type { GitStatus, GitCommit, GitBranch, GitStash, GitRemote, GitTag, GitMergeState, MergeStrategy, View, ActivityLogEntry, NotificationType } from './types/git'
@@ -46,6 +47,7 @@ export function App({ cwd }: { cwd: string }) {
   const [repoFilterQuery, setRepoFilterQuery] = useState('')
   const [repoFocusedPanel, setRepoFocusedPanel] = useState<'filter' | 'repos'>('repos')
   const [showRepoSwitchModal, setShowRepoSwitchModal] = useState(false)
+  const [showKeyboardShortcutsModal, setShowKeyboardShortcutsModal] = useState(false)
   const [pendingRepoSwitch, setPendingRepoSwitch] = useState<string | null>(null)
   const [view, setView] = useState<View>('main')
   const [focusedPanel, setFocusedPanel] = useState<'status' | 'branches' | 'log' | 'stashes' | 'remotes' | 'tags' | 'diff'>('status')
@@ -1845,7 +1847,7 @@ export function App({ cwd }: { cwd: string }) {
   ]
 
   useKeyboard((key) => {
-    if (showExitModal || showCommandPalette || showConfigModal || showThemesModal || showProgressModal || showConfirmModal || showRenameModal || showBranchModal || showBranchRenameModal || showSetUpstreamModal || showMergeModal || showConflictModal || showResetModal || showTagModal || showRemoteModal || showRepoSwitchModal) {
+    if (showExitModal || showCommandPalette || showConfigModal || showThemesModal || showProgressModal || showConfirmModal || showRenameModal || showBranchModal || showBranchRenameModal || showSetUpstreamModal || showMergeModal || showConflictModal || showResetModal || showTagModal || showRemoteModal || showRepoSwitchModal || showKeyboardShortcutsModal) {
       // Modals handle their own keyboard input
       return
     }
@@ -1903,6 +1905,12 @@ export function App({ cwd }: { cwd: string }) {
     // Toggle command log with '`' key (backtick)
     if (key.sequence === '`') {
       setShowCommandLog((prev) => !prev)
+      return
+    }
+
+    // Show keyboard shortcuts with Shift+? (which is just '?')
+    if (key.sequence === '?') {
+      setShowKeyboardShortcutsModal(true)
       return
     }
 
@@ -2700,6 +2708,12 @@ export function App({ cwd }: { cwd: string }) {
             setShowRepoSwitchModal(false)
             setPendingRepoSwitch(null)
           }}
+        />
+      )}
+
+      {showKeyboardShortcutsModal && (
+        <KeyboardShortcutsModal
+          onClose={() => setShowKeyboardShortcutsModal(false)}
         />
       )}
     </box>
