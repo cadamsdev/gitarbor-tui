@@ -1,4 +1,5 @@
 import { theme } from '../theme';
+import { Fieldset } from './Fieldset';
 
 interface InputProps {
   value: string;
@@ -20,6 +21,16 @@ interface InputProps {
   paddingRight?: number | `${number}%`;
   paddingBottom?: number | `${number}%`;
   paddingLeft?: number | `${number}%`;
+  // Fieldset props
+  label?: string;
+  borderColor?: string;
+  titleColor?: string;
+  editMode?: boolean;
+  flexGrow?: number;
+  fieldsetHeight?: number | string;
+  fieldsetWidth?: number | string;
+  fieldsetPaddingX?: number;
+  fieldsetPaddingY?: number;
 }
 
 export function Input(props: InputProps) {
@@ -43,6 +54,16 @@ export function Input(props: InputProps) {
     paddingRight,
     paddingBottom,
     paddingLeft = theme.spacing.xs,
+    // Fieldset props
+    label,
+    borderColor,
+    titleColor,
+    editMode,
+    flexGrow,
+    fieldsetHeight,
+    fieldsetWidth,
+    fieldsetPaddingX,
+    fieldsetPaddingY,
   } = props;
 
   // Normalize the callback - support both onInput and onChange
@@ -54,8 +75,7 @@ export function Input(props: InputProps) {
     }
   };
 
-  // Pass through onSubmit as-is since it already receives the value
-  return (
+  const inputElement = (
     <input
       value={value}
       onInput={handleInput}
@@ -77,4 +97,27 @@ export function Input(props: InputProps) {
       paddingLeft={paddingLeft}
     />
   );
+
+  // If label is provided, wrap in Fieldset
+  if (label) {
+    return (
+      <Fieldset
+        title={label}
+        focused={focused}
+        borderColor={borderColor}
+        titleColor={titleColor}
+        editMode={editMode}
+        flexGrow={flexGrow}
+        height={fieldsetHeight}
+        width={fieldsetWidth}
+        paddingX={fieldsetPaddingX}
+        paddingY={fieldsetPaddingY}
+      >
+        {inputElement}
+      </Fieldset>
+    );
+  }
+
+  // Otherwise, return bare input
+  return inputElement;
 }

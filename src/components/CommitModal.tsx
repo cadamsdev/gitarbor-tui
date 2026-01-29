@@ -3,7 +3,6 @@ import { useKeyboard } from '@opentui/react';
 import { theme } from '../theme';
 import { Modal } from './Modal';
 import { Input } from './Input';
-import { Fieldset } from './Fieldset';
 
 interface CommitModalProps {
   onCommit: (message: string) => void;
@@ -87,36 +86,28 @@ export function CommitModal({ onCommit, onCancel }: CommitModalProps) {
   return (
     <Modal width={80} height={20} title="Create Commit">
       {/* Subject line */}
-      <Fieldset
-        title={`Subject (${subjectLength}/50)`}
+      <Input
+        label={`Subject (${subjectLength}/50)`}
+        width={72}
+        placeholder="Brief description (50 chars recommended)"
+        value={subject}
+        onInput={(value) => setSubject(value)}
+        onSubmit={handleSubmit}
         focused={focusedField === 'subject'}
-      >
-        <Input
-          width={72}
-          placeholder="Brief description (50 chars recommended)"
-          value={subject}
-          onInput={(value) => setSubject(value)}
-          onSubmit={handleSubmit}
-          focused={focusedField === 'subject'}
-        />
-      </Fieldset>
+      />
 
       <text> </text>
 
       {/* Body */}
-      <Fieldset
-        title="Body (optional)"
+      <Input
+        label="Body (optional)"
+        width={72}
+        placeholder="Detailed explanation (press Tab to switch fields)"
+        value={body}
+        onInput={(value) => setBody(value)}
+        onSubmit={handleSubmit}
         focused={focusedField === 'body'}
-      >
-        <Input
-          width={72}
-          placeholder="Detailed explanation (press Tab to switch fields)"
-          value={body}
-          onInput={(value) => setBody(value)}
-          onSubmit={handleSubmit}
-          focused={focusedField === 'body'}
-        />
-      </Fieldset>
+      />
 
       <text> </text>
 
