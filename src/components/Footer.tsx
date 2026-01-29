@@ -22,7 +22,7 @@ export function Footer({
 }: FooterProps) {
   const getContextualCommands = (): { line1: string; line2: string } => {
     // Global commands that are always available
-    const globalCommands = '[/] Palette | [?] Help | [P] Push | [p] Pull | [f] Fetch';
+    const globalCommands = '[/] Settings | [?] Help | [P] Push | [p] Pull | [f] Fetch';
 
     // View-specific and context-specific commands
     if (view === 'repos' && focusedPanel === 'filter') {
