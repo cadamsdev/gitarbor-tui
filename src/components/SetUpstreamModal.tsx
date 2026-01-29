@@ -93,17 +93,15 @@ export function SetUpstreamModal({
           </box>
         </>
       ) : (
-        <>
-          <text fg={theme.colors.text.muted}>Enter upstream manually:</text>
-          <Input
-            width={76}
-            placeholder="origin/main"
-            value={upstream}
-            onInput={(value) => setUpstream(value)}
-            onSubmit={handleSubmit}
-            focused={true}
-          />
-        </>
+        <Input
+          label="Enter upstream manually"
+          width={76}
+          placeholder="origin/main"
+          value={upstream}
+          onInput={(value) => setUpstream(value)}
+          onSubmit={handleSubmit}
+          focused={true}
+        />
       )}
 
       <text> </text>

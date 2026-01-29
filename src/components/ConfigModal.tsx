@@ -118,6 +118,7 @@ export function ConfigModal({ onClose }: ConfigModalProps) {
         </text>
         {editMode && selectedField === 'name' ? (
           <Input
+            label="Name"
             value={editValue}
             onInput={setEditValue}
             onSubmit={handleSaveGitField}
@@ -145,6 +146,7 @@ export function ConfigModal({ onClose }: ConfigModalProps) {
         </text>
         {editMode && selectedField === 'email' ? (
           <Input
+            label="Email"
             value={editValue}
             onInput={setEditValue}
             onSubmit={handleSaveGitField}

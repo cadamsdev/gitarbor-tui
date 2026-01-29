@@ -34,8 +34,8 @@ export function RenameModal({ currentPath, onRename, onCancel }: RenameModalProp
       <text> </text>
 
       {/* New path */}
-      <text fg={theme.colors.text.muted}>New path:</text>
       <Input
+        label="New path"
         width={76}
         placeholder="Enter new path"
         value={newPath}

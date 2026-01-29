@@ -51,9 +51,9 @@ export function TagModal({ commitHash, commitMessage, onCreateTag, onCancel }: T
         </box>
       )}
 
-      <box flexDirection="column" marginTop={theme.spacing.sm}>
-        <text fg={theme.colors.text.secondary}>Tag name:</text>
+      <box marginTop={theme.spacing.sm}>
         <Input
+          label="Tag name"
           width={76}
           value={tagName}
           onInput={setTagName}
@@ -63,9 +63,9 @@ export function TagModal({ commitHash, commitMessage, onCreateTag, onCancel }: T
         />
       </box>
 
-      <box flexDirection="column" marginTop={theme.spacing.sm}>
-        <text fg={theme.colors.text.secondary}>Tag message (optional):</text>
+      <box marginTop={theme.spacing.sm}>
         <Input
+          label="Tag message (optional)"
           width={76}
           value={tagMessage}
           onInput={setTagMessage}

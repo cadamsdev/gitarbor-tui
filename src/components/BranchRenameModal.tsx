@@ -37,8 +37,8 @@ export function BranchRenameModal({
       </text>
       <text> </text>
 
-      <text fg={theme.colors.text.muted}>New name:</text>
       <Input
+        label="New name"
         width={76}
         placeholder="new-branch-name"
         value={newName}

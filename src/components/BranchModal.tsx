@@ -40,8 +40,8 @@ export function BranchModal({ onCreateBranch, onCancel, currentCommit }: BranchM
   return (
     <Modal width={80} height={16} title="Create New Branch">
       {/* Branch name */}
-      <text fg={theme.colors.text.muted}>Branch name:</text>
       <Input
+        label="Branch name"
         width={76}
         placeholder="feature/my-new-feature"
         value={branchName}
@@ -53,8 +53,8 @@ export function BranchModal({ onCreateBranch, onCancel, currentCommit }: BranchM
       <text> </text>
 
       {/* Start point */}
-      <text fg={theme.colors.text.muted}>Start point (optional):</text>
       <Input
+        label="Start point (optional)"
         width={76}
         placeholder={
           currentCommit ? `Leave empty for HEAD (${currentCommit})` : 'Leave empty for HEAD'

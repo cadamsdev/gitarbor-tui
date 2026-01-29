@@ -59,15 +59,14 @@ export function CommandPalette({ commands, onClose }: CommandPaletteProps) {
   return (
     <Modal width={100} height={20} title="Command Palette">
       <box flexDirection="column" flexGrow={1}>
-        <box marginBottom={1}>
-          <Input
-            value={search}
-            onInput={setSearch}
-            placeholder="Type to search commands..."
-            focused={true}
-            width={96}
-          />
-        </box>
+        <Input
+          label="Search commands"
+          value={search}
+          onInput={setSearch}
+          placeholder="Type to search commands..."
+          focused={true}
+          width={96}
+        />
 
         <scrollbox ref={scrollRef} width="100%" height={10} viewportCulling={true}>
           {filteredCommands.length === 0 ? (
