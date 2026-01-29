@@ -10,7 +10,7 @@ import { HistoryView } from './components/HistoryView';
 import { DiffView } from './components/DiffView';
 import { CommitModal } from './components/CommitModal';
 import { ExitModal } from './components/ExitModal';
-import { CommandPalette } from './components/CommandPalette';
+import { SettingsModal } from './components/SettingsModal';
 import { ConfigModal } from './components/ConfigModal';
 import { ThemesModal } from './components/ThemesModal';
 import { ProgressModal } from './components/ProgressModal';
@@ -88,7 +88,7 @@ export function App({ cwd }: { cwd: string }) {
   const [showCommitModal, setShowCommitModal] = useState(false);
   const [showStashModal, setShowStashModal] = useState(false);
   const [showExitModal, setShowExitModal] = useState(false);
-  const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [showThemesModal, setShowThemesModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -2054,7 +2054,7 @@ export function App({ cwd }: { cwd: string }) {
   useKeyboard((key) => {
     if (
       showExitModal ||
-      showCommandPalette ||
+      showSettingsModal ||
       showConfigModal ||
       showThemesModal ||
       showProgressModal ||
@@ -2119,9 +2119,9 @@ export function App({ cwd }: { cwd: string }) {
       return;
     }
 
-    // Command palette with '/' key
+    // Settings modal with '/' key
     if (key.sequence === '/') {
-      setShowCommandPalette(true);
+      setShowSettingsModal(true);
       return;
     }
 
@@ -2799,8 +2799,18 @@ export function App({ cwd }: { cwd: string }) {
         <ExitModal onConfirm={handleExit} onCancel={() => setShowExitModal(false)} />
       )}
 
-      {showCommandPalette && (
-        <CommandPalette commands={commands} onClose={() => setShowCommandPalette(false)} />
+      {showSettingsModal && (
+        <SettingsModal
+          onEditConfig={() => {
+            setShowSettingsModal(false);
+            setShowConfigModal(true);
+          }}
+          onChangeTheme={() => {
+            setShowSettingsModal(false);
+            setShowThemesModal(true);
+          }}
+          onClose={() => setShowSettingsModal(false)}
+        />
       )}
 
       {showConfigModal && <ConfigModal onClose={() => setShowConfigModal(false)} />}
