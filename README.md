@@ -1,6 +1,8 @@
 # GitArbor TUI
 
-Next-generation Git client that runs in your terminal. Built with Bun, OpenTUI, and React. 
+Next-generation Git client that runs in your terminal. Built with Bun, OpenTUI, and React.
+
+![GitArbor Preview](media/preview.png)
 
 ## Features
 
