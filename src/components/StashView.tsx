@@ -1,3 +1,5 @@
+import { useRef, useEffect } from 'react';
+import { ScrollBoxRenderable } from '@opentui/core';
 import { theme } from '../theme';
 import { Fieldset } from './Fieldset';
 import type { GitStash } from '../types/git';
@@ -9,6 +11,28 @@ interface StashViewProps {
 }
 
 export function StashView({ stashes, selectedIndex, focused }: StashViewProps) {
+  const scrollRef = useRef<ScrollBoxRenderable>(null);
+
+  // Auto-scroll to selected stash only if it goes out of view
+  useEffect(() => {
+    if (!scrollRef.current) return;
+    
+    const scrollBox = scrollRef.current;
+    const itemHeight = 1;
+    const currentScroll = scrollBox.scrollTop;
+    const viewportHeight = scrollBox.viewport.height;
+    const selectedPosition = selectedIndex * itemHeight;
+    
+    // Check if selected item is above the viewport
+    if (selectedPosition < currentScroll) {
+      scrollBox.scrollTo({ x: 0, y: selectedPosition });
+    }
+    // Check if selected item is below the viewport
+    else if (selectedPosition >= currentScroll + viewportHeight) {
+      scrollBox.scrollTo({ x: 0, y: selectedPosition - viewportHeight + 1 });
+    }
+  }, [selectedIndex]);
+
   return (
     <Fieldset
       title="Stash List"
@@ -17,15 +41,20 @@ export function StashView({ stashes, selectedIndex, focused }: StashViewProps) {
       paddingX={theme.spacing.xs}
       paddingY={theme.spacing.none}
     >
-      <box flexDirection="column">
-        {stashes.length === 0 ? (
-          <text fg={theme.colors.text.muted}>No stashes saved</text>
-        ) : (
-          stashes.map((stash, idx) => {
+      {stashes.length === 0 ? (
+        <text fg={theme.colors.text.muted}>No stashes saved</text>
+      ) : (
+        <scrollbox
+          ref={scrollRef}
+          width="100%"
+          height="100%"
+          viewportCulling={true}
+        >
+          {stashes.map((stash, idx) => {
             const isSelected = idx === selectedIndex;
 
             return (
-              <box key={stash.name} flexDirection="row">
+              <box key={stash.name} flexDirection="row" height={1}>
                 <text fg={isSelected ? theme.colors.primary : theme.colors.border}>
                   {isSelected ? '>' : ' '}
                 </text>
@@ -38,9 +67,9 @@ export function StashView({ stashes, selectedIndex, focused }: StashViewProps) {
                 </text>
               </box>
             );
-          })
-        )}
-      </box>
+          })}
+        </scrollbox>
+      )}
     </Fieldset>
   );
 }
