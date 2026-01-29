@@ -25,24 +25,25 @@ export function StashModal({ onStash, onCancel }: StashModalProps) {
   });
 
   return (
-    <Modal width={80} height={12} title="Create Stash">
-      <text fg={theme.colors.text.muted}>
-        Stash your working directory changes to save them for later.
-      </text>
-      <text> </text>
+    <Modal width={80} height={16} title="Create Stash">
+      <box marginBottom={theme.spacing.xs}>
+        <text fg={theme.colors.text.muted}>
+          Stash your working directory changes to save them for later.
+        </text>
+      </box>
 
       {/* Message input */}
-      <text fg={theme.colors.text.muted}>Message (optional):</text>
-      <Input
-        width={76}
-        placeholder="Description of stashed changes"
-        value={message}
-        onInput={(value) => setMessage(value)}
-        onSubmit={handleSubmit}
-        focused={true}
-      />
-
-      <text> </text>
+      <box marginBottom={theme.spacing.xs}>
+        <Input
+          label="Message (optional)"
+          width={76}
+          placeholder="Description of stashed changes"
+          value={message}
+          onInput={(value) => setMessage(value)}
+          onSubmit={handleSubmit}
+          focused={true}
+        />
+      </box>
 
       {/* Help text */}
       <box
