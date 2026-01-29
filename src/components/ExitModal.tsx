@@ -49,7 +49,7 @@ export function ExitModal({ onConfirm, onCancel }: ExitModalProps) {
   useKeyboard(handleKeyboard);
 
   return (
-    <Modal width={55} height={10} title="Exit GitArbor?" borderColor={theme.colors.status.info}>
+    <Modal width={55} height={13} title="Exit GitArbor?" borderColor={theme.colors.status.info}>
       <box style={{ justifyContent: 'center' }}>
         <text fg={theme.colors.text.muted}>Are you sure you want to quit?</text>
       </box>
