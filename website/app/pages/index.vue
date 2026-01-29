@@ -14,9 +14,9 @@
             Fast, beautiful, and built with modern web technologies.
           </p>
           <div class="hero-cta">
-            <NuxtLink to="/docs/installation" class="btn btn-primary btn-large">
+            <a href="https://github.com/cadamsdev/gitarbor-tui" target="_blank" rel="noopener" class="btn btn-primary btn-large">
               Get Started
-            </NuxtLink>
+            </a>
             <a href="https://github.com/cadamsdev/gitarbor-tui" target="_blank" rel="noopener" class="btn btn-outline btn-large">
               View on GitHub
             </a>
@@ -24,6 +24,57 @@
           
           <div class="hero-demo">
             <img src="/screenshots/preview.png" alt="GitArbor Interface Preview" class="hero-screenshot" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Installation Section -->
+    <section class="installation py-2xl">
+      <div class="container">
+        <h2 class="text-center mb-lg">Quick Install</h2>
+        <p class="text-center text-muted mb-2xl">
+          Get started with GitArbor in seconds
+        </p>
+        
+        <div class="install-tabs-container">
+          <div class="install-tabs">
+            <button 
+              :class="['tab-button', { active: activeTab === 'unix' }]"
+              @click="activeTab = 'unix'"
+            >
+              Linux & Mac
+            </button>
+            <button 
+              :class="['tab-button', { active: activeTab === 'windows' }]"
+              @click="activeTab = 'windows'"
+            >
+              Windows
+            </button>
+          </div>
+          
+          <div class="tab-content card">
+            <!-- Linux & Mac Tab -->
+            <div v-show="activeTab === 'unix'" class="tab-panel">
+              <div class="code-block mb-md">
+                <code>curl -fsSL https://gitarbor.com/install.sh | bash</code>
+              </div>
+              <p class="text-muted mb-sm">Then run:</p>
+              <div class="code-block">
+                <code>gitarbor</code>
+              </div>
+            </div>
+            
+            <!-- Windows Tab -->
+            <div v-show="activeTab === 'windows'" class="tab-panel">
+              <div class="code-block mb-md">
+                <code>powershell -c "irm https://gitarbor.com/install.ps1 | iex"</code>
+              </div>
+              <p class="text-muted mb-sm">Then run:</p>
+              <div class="code-block">
+                <code>gitarbor</code>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -202,11 +253,11 @@
             Install GitArbor and experience a better way to work with Git in your terminal.
           </p>
           <div class="cta-buttons">
-            <NuxtLink to="/docs/installation" class="btn btn-primary btn-large">
+            <a href="https://github.com/cadamsdev/gitarbor-tui" target="_blank" rel="noopener" class="btn btn-primary btn-large">
               Install Now
-            </NuxtLink>
-            <NuxtLink to="/docs" class="btn btn-outline btn-large">
-              Read Documentation
+            </a>
+            <NuxtLink to="/themes" class="btn btn-outline btn-large">
+              Browse Themes
             </NuxtLink>
           </div>
         </div>
@@ -216,6 +267,10 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+
+const activeTab = ref<'unix' | 'windows'>('unix')
+
 useHead({
   title: 'GitArbor TUI - Next-Generation Git Client for Your Terminal',
   meta: [
@@ -295,6 +350,83 @@ useSeoMeta({
 .hero-screenshot:hover {
   transform: translateY(-4px);
   box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+}
+
+.installation {
+  background: var(--color-bg-primary);
+}
+
+.install-tabs-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.install-tabs {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.tab-button {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: 1.125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.tab-button:hover {
+  color: var(--color-text-primary);
+  background: rgba(204, 136, 68, 0.1);
+}
+
+.tab-button.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.tab-content {
+  padding: var(--spacing-xl);
+}
+
+.tab-panel {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.code-block {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  overflow-x: auto;
+}
+
+.code-block code {
+  color: var(--color-text-primary);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.95rem;
+  white-space: pre;
+  word-break: break-all;
 }
 
 .features {

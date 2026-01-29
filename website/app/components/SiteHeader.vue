@@ -8,7 +8,6 @@
         </NuxtLink>
         
         <div class="nav-links">
-          <NuxtLink to="/docs" class="nav-link">Docs</NuxtLink>
           <NuxtLink to="/themes" class="nav-link">Themes</NuxtLink>
           <a href="https://github.com/cadamsdev/gitarbor-tui" target="_blank" rel="noopener" class="nav-link">
             <span class="github-icon">⭐</span> GitHub
