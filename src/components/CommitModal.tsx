@@ -3,6 +3,7 @@ import { useKeyboard } from '@opentui/react';
 import { theme } from '../theme';
 import { Modal } from './Modal';
 import { Input } from './Input';
+import { Textarea } from './Textarea';
 
 interface CommitModalProps {
   onCommit: (message: string) => void;
@@ -84,7 +85,7 @@ export function CommitModal({ onCommit, onCancel }: CommitModalProps) {
   }
 
   return (
-    <Modal width={80} height={20} title="Create Commit">
+    <Modal width={80} height={21} title="Create Commit">
       {/* Subject line */}
       <Input
         label={`Subject (${subjectLength}/50)`}
@@ -96,20 +97,17 @@ export function CommitModal({ onCommit, onCancel }: CommitModalProps) {
         focused={focusedField === 'subject'}
       />
 
-      <text> </text>
-
       {/* Body */}
-      <Input
+      <Textarea
         label="Body (optional)"
         width={72}
+        height={5}
         placeholder="Detailed explanation (press Tab to switch fields)"
         value={body}
         onInput={(value) => setBody(value)}
         onSubmit={handleSubmit}
         focused={focusedField === 'body'}
       />
-
-      <text> </text>
 
       {/* Help text */}
       <box
