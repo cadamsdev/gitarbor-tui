@@ -10,9 +10,13 @@ A next-generation Git client that runs in your terminal. Built with Bun, OpenTUI
 
 </div>
 
-## Features
+## ❤️ Sponsors
 
-TODO
+Support development by becoming a sponsor! Your avatar or company logo will appear below.
+
+[Become a Sponsor](https://github.com/sponsors/cadamsdev)
+
+<!-- Sponsors will appear here -->
 
 ## Screenshots
 
