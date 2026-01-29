@@ -1,0 +1,388 @@
+<template>
+  <div>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            The Git Client<br />
+            Built for Developers
+          </h1>
+          <p class="hero-subtitle">
+            A next-generation Git client that runs in your terminal.
+            <br />
+            Fast, beautiful, and built with modern technologies.
+          </p>
+          <div class="hero-cta">
+            <NuxtLink to="/docs/installation" class="btn btn-primary btn-large">
+              Get Started
+            </NuxtLink>
+            <a href="https://github.com/cadamsdev/gitarbor-tui" target="_blank" rel="noopener" class="btn btn-outline btn-large">
+              View on GitHub
+            </a>
+          </div>
+          
+          <div class="hero-demo">
+            <div class="terminal-window">
+              <div class="terminal-header">
+                <span class="terminal-dot red"></span>
+                <span class="terminal-dot yellow"></span>
+                <span class="terminal-dot green"></span>
+              </div>
+              <div class="terminal-body">
+                <pre><code>$ gitarbor
+
+<span class="text-git-staged">✓</span> <span class="text-muted">Connected to repository</span>
+<span class="text-primary">→</span> <span class="text-white">main</span> [↑2 ↓0]
+
+<span class="text-git-modified">M</span>  src/components/App.tsx
+<span class="text-git-staged">A</span>  src/utils/helpers.ts
+<span class="text-git-untracked">?</span>  README.md</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features py-2xl">
+      <div class="container">
+        <h2 class="text-center mb-2xl">Why GitArbor?</h2>
+        
+        <div class="features-grid">
+          <div class="feature-card card">
+            <div class="feature-icon">⚡</div>
+            <h3>Lightning Fast</h3>
+            <p>Built with Bun runtime for instant startup and blazing-fast performance. No lag, no waiting.</p>
+          </div>
+          
+          <div class="feature-card card">
+            <div class="feature-icon">🎨</div>
+            <h3>Beautiful Interface</h3>
+            <p>Powered by OpenTUI and React for a smooth, intuitive terminal UI with multiple themes.</p>
+          </div>
+          
+          <div class="feature-card card">
+            <div class="feature-icon">⌨️</div>
+            <h3>Keyboard-First</h3>
+            <p>Navigate your repositories with vim-like keybindings. Mouse optional, keyboard optimized.</p>
+          </div>
+          
+          <div class="feature-card card">
+            <div class="feature-icon">🔍</div>
+            <h3>Powerful Search</h3>
+            <p>Command palette for instant access to any feature. Find commits, branches, and files instantly.</p>
+          </div>
+          
+          <div class="feature-card card">
+            <div class="feature-icon">🎭</div>
+            <h3>Multiple Themes</h3>
+            <p>Choose from 10+ carefully crafted themes including Dracula, Nord, Gruvbox, and more.</p>
+          </div>
+          
+          <div class="feature-card card">
+            <div class="feature-icon">🚀</div>
+            <h3>Modern Stack</h3>
+            <p>Built with TypeScript, React 19, and the latest web technologies adapted for the terminal.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section class="tech-stack py-2xl">
+      <div class="container">
+        <h2 class="text-center mb-lg">Built With Modern Technologies</h2>
+        <p class="text-center text-muted mb-2xl">
+          GitArbor leverages cutting-edge tools to deliver the best terminal experience
+        </p>
+        
+        <div class="tech-grid">
+          <div class="tech-item">
+            <div class="tech-logo">🟠</div>
+            <h4>Bun</h4>
+            <p class="text-muted">Fast JavaScript runtime</p>
+          </div>
+          
+          <div class="tech-item">
+            <div class="tech-logo">📺</div>
+            <h4>OpenTUI</h4>
+            <p class="text-muted">React for terminals</p>
+          </div>
+          
+          <div class="tech-item">
+            <div class="tech-logo">⚛️</div>
+            <h4>React 19</h4>
+            <p class="text-muted">Latest React features</p>
+          </div>
+          
+          <div class="tech-item">
+            <div class="tech-logo">📘</div>
+            <h4>TypeScript</h4>
+            <p class="text-muted">Type-safe code</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta py-2xl">
+      <div class="container">
+        <div class="cta-card card text-center">
+          <h2 class="mb-md">Ready to Get Started?</h2>
+          <p class="text-muted mb-xl">
+            Install GitArbor and experience a better way to work with Git in your terminal.
+          </p>
+          <div class="cta-buttons">
+            <NuxtLink to="/docs/installation" class="btn btn-primary btn-large">
+              Install Now
+            </NuxtLink>
+            <NuxtLink to="/docs" class="btn btn-outline btn-large">
+              Read Documentation
+            </NuxtLink>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup lang="ts">
+useHead({
+  title: 'GitArbor TUI - Next-Generation Git Client for Your Terminal',
+  meta: [
+    {
+      name: 'description',
+      content: 'A next-generation Git client that runs in your terminal. Built with Bun, OpenTUI, and React for a fast, beautiful, keyboard-first experience.',
+    },
+    {
+      name: 'keywords',
+      content: 'git, tui, terminal, git client, bun, opentui, react, typescript, keyboard-first, command line',
+    },
+  ],
+})
+
+useSeoMeta({
+  title: 'GitArbor TUI - Next-Generation Git Client for Your Terminal',
+  ogTitle: 'GitArbor TUI - Next-Generation Git Client for Your Terminal',
+  description: 'A next-generation Git client that runs in your terminal. Built with Bun, OpenTUI, and React for a fast, beautiful, keyboard-first experience.',
+  ogDescription: 'A next-generation Git client that runs in your terminal. Built with Bun, OpenTUI, and React for a fast, beautiful, keyboard-first experience.',
+  ogType: 'website',
+  twitterTitle: 'GitArbor TUI - Next-Generation Git Client for Your Terminal',
+  twitterDescription: 'A next-generation Git client that runs in your terminal. Built with Bun, OpenTUI, and React.',
+})
+</script>
+
+<style scoped>
+.hero {
+  padding: var(--spacing-2xl) 0;
+  background: linear-gradient(180deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
+}
+
+.hero-content {
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: 4rem;
+  line-height: 1.1;
+  margin-bottom: var(--spacing-md);
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xl);
+  line-height: 1.6;
+}
+
+.hero-cta {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.btn-large {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: 1.125rem;
+}
+
+.hero-demo {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.terminal-window {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.terminal-header {
+  background: var(--color-bg-highlight);
+  padding: var(--spacing-sm);
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.terminal-dot.red {
+  background: #ff5f56;
+}
+
+.terminal-dot.yellow {
+  background: #ffbd2e;
+}
+
+.terminal-dot.green {
+  background: #27c93f;
+}
+
+.terminal-body {
+  padding: var(--spacing-lg);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.terminal-body pre {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.terminal-body code {
+  background: none;
+  padding: 0;
+  color: var(--color-text-primary);
+}
+
+.text-white {
+  color: var(--color-text-primary);
+}
+
+.text-git-staged {
+  color: var(--color-git-staged);
+}
+
+.text-git-modified {
+  color: var(--color-git-modified);
+}
+
+.text-git-untracked {
+  color: var(--color-git-untracked);
+}
+
+.features {
+  background: var(--color-bg-primary);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.feature-card {
+  text-align: center;
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.feature-card h3 {
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.tech-stack {
+  background: var(--color-bg-secondary);
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-xl);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.tech-item {
+  text-align: center;
+}
+
+.tech-logo {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.tech-item h4 {
+  color: var(--color-primary);
+  margin-bottom: 0.25rem;
+}
+
+.cta {
+  background: var(--color-bg-primary);
+}
+
+.cta-card {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: var(--spacing-2xl);
+  background: linear-gradient(135deg, rgba(204, 136, 68, 0.1) 0%, rgba(187, 119, 51, 0.05) 100%);
+}
+
+.cta-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.25rem;
+  }
+  
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn-large {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .tech-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+</style>
