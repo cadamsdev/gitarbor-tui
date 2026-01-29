@@ -54,9 +54,9 @@
           </div>
           
           <div class="feature-card card">
-            <div class="feature-icon">🔍</div>
-            <h3>Powerful Search</h3>
-            <p>Command palette for instant access to any feature. Find commits, branches, and files instantly.</p>
+            <div class="feature-icon">⚙️</div>
+            <h3>Customizable</h3>
+            <p>Integrated settings modal for quick access to configuration. Customize themes, preferences, and behavior instantly.</p>
           </div>
           
           <div class="feature-card card">
