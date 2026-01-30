@@ -329,8 +329,8 @@ useSeoMeta({
 }
 
 .btn-large {
-  padding: var(--spacing-md) var(--spacing-xl);
-  font-size: 1.125rem;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: 1rem;
 }
 
 .hero-demo {
