@@ -198,6 +198,11 @@ export class GitClient {
           };
         });
     } catch (error) {
+      // Handle the case when branch has no commits yet
+      const errorMsg = String(error);
+      if (errorMsg.includes('does not have any commits yet')) {
+        return [];
+      }
       throw new Error(`Failed to get git log: ${error}`);
     }
   }
