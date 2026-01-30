@@ -58,7 +58,17 @@ Support development by becoming a sponsor! Your avatar or company logo will appe
 
 ## Installation
 
-TODO
+### Linux & macOS
+
+```bash
+curl -fsSL https://gitarbor.com/install.sh | bash
+```
+
+### Windows
+
+```powershell
+powershell -c "irm https://gitarbor.com/install.ps1 | iex"
+```
 
 ## Usage
 
