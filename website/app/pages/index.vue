@@ -472,8 +472,6 @@ useSeoMeta({
   width: 100%;
   height: auto;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
