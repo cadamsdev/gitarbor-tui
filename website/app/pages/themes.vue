@@ -30,22 +30,27 @@
         </div>
       </div>
       
-      <div class="themes-info mt-2xl">
+      <div class="themes-info mt-3xl">
         <div class="info-card card text-center">
           <h2 class="mb-md">How to Change Themes</h2>
           <p class="text-muted mb-lg">
-            Change your theme in GitArbor using one of these methods:
+            Change your theme in GitArbor with these simple steps:
           </p>
           
-          <div class="methods-grid">
-            <div class="method">
-              <h4>Command Palette</h4>
-              <p class="text-muted">Press <kbd>Ctrl+P</kbd> and search for "Change Theme"</p>
+          <div class="steps">
+            <div class="step">
+              <div class="step-number">1</div>
+              <p class="text-muted">Press <kbd>/</kbd> to open Settings Modal</p>
             </div>
-            
-            <div class="method">
-              <h4>Settings</h4>
-              <p class="text-muted">Press <kbd>,</kbd> to open Settings and select a theme</p>
+            <div class="step-arrow">→</div>
+            <div class="step">
+              <div class="step-number">2</div>
+              <p class="text-muted">Select "Change Theme"</p>
+            </div>
+            <div class="step-arrow">→</div>
+            <div class="step">
+              <div class="step-number">3</div>
+              <p class="text-muted">Choose your theme</p>
             </div>
           </div>
         </div>
@@ -314,20 +319,45 @@ useSeoMeta({
   background: linear-gradient(135deg, rgba(204, 136, 68, 0.1) 0%, rgba(187, 119, 51, 0.05) 100%);
 }
 
-.methods-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--spacing-lg);
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
   margin-top: var(--spacing-lg);
+  flex-wrap: wrap;
 }
 
-.method h4 {
-  color: var(--color-primary);
-  margin-bottom: var(--spacing-sm);
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
-.method p {
+.step-number {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: var(--color-bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.25rem;
+  box-shadow: 0 4px 12px rgba(204, 136, 68, 0.3);
+}
+
+.step p {
   margin: 0;
+  max-width: 180px;
+}
+
+.step-arrow {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 kbd {
@@ -346,8 +376,12 @@ kbd {
     grid-template-columns: 1fr;
   }
   
-  .methods-grid {
-    grid-template-columns: 1fr;
+  .steps {
+    flex-direction: column;
+  }
+  
+  .step-arrow {
+    transform: rotate(90deg);
   }
 }
 </style>
