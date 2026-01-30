@@ -23,6 +23,15 @@ async function checkGitInstalled(): Promise<boolean> {
   }
 }
 
+async function isGitRepository(path: string): Promise<boolean> {
+  try {
+    await execAsync('git rev-parse --git-dir', { cwd: path });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function loadThemePreference() {
   try {
     const config = await readFile(CONFIG_PATH, 'utf-8');
@@ -47,6 +56,17 @@ if (!hasGit) {
   process.exit(1);
 }
 
+// Check if current directory is a git repository
+const cwd = process.cwd();
+const isRepo = await isGitRepository(cwd);
+if (!isRepo) {
+  console.error('Error: Not a git repository');
+  console.error(`The directory '${cwd}' is not a git repository.`);
+  console.error('\nTo initialize a new git repository, run:');
+  console.error('  git init');
+  process.exit(1);
+}
+
 // Load theme before starting the app
 await loadThemePreference();
 
@@ -57,7 +77,6 @@ const renderer = await createCliRenderer({
 });
 
 // Create and mount the React root
-const cwd = process.cwd();
 const root = createRoot(renderer);
 root.render(<MultiRepoApp initialCwd={cwd} />);
 
