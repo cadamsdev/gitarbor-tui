@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/seo', '@nuxt/icon'],
 
   site: {
-    url: 'https://gitarbor.dev',
+    url: 'https://gitarbor.com',
     name: 'GitArbor TUI',
     description: 'A next-generation Git client that runs in your terminal. Built with Bun, OpenTUI, and React.',
     defaultLocale: 'en',
@@ -22,7 +22,10 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1',
       htmlAttrs: {
         lang: 'en'
-      }
+      },
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }
+      ]
     }
   },
 
