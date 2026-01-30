@@ -35,7 +35,7 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      routes: ['/', '/docs', '/docs/installation', '/docs/usage', '/themes'],
+      routes: ['/', '/themes'],
       crawlLinks: true,
     }
   }

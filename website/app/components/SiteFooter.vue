@@ -9,11 +9,8 @@
         </div>
         
         <div class="footer-section">
-          <h4>Documentation</h4>
+          <h4>Quick Links</h4>
           <ul class="footer-links">
-            <li><NuxtLink to="/docs">Getting Started</NuxtLink></li>
-            <li><NuxtLink to="/docs/installation">Installation</NuxtLink></li>
-            <li><NuxtLink to="/docs/usage">Usage</NuxtLink></li>
             <li><NuxtLink to="/themes">Themes</NuxtLink></li>
           </ul>
         </div>
