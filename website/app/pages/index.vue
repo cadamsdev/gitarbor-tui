@@ -57,22 +57,54 @@
             <!-- Linux & Mac Tab -->
             <div v-show="activeTab === 'unix'" class="tab-panel">
               <div class="code-block mb-md">
-                <code>curl -fsSL https://gitarbor.com/install.sh | bash</code>
+                <code>{{ commands.unix }}</code>
+                <button 
+                  class="copy-button" 
+                  @click="copyToClipboard(commands.unix)"
+                  :title="copiedCommand === commands.unix ? 'Copied!' : 'Copy to clipboard'"
+                >
+                  <span v-if="copiedCommand === commands.unix">Copied!</span>
+                  <span v-else>Copy</span>
+                </button>
               </div>
               <p class="text-muted mb-sm">Then run:</p>
               <div class="code-block">
-                <code>gitarbor</code>
+                <code>{{ commands.run }}</code>
+                <button 
+                  class="copy-button" 
+                  @click="copyToClipboard(commands.run)"
+                  :title="copiedCommand === commands.run ? 'Copied!' : 'Copy to clipboard'"
+                >
+                  <span v-if="copiedCommand === commands.run">Copied!</span>
+                  <span v-else>Copy</span>
+                </button>
               </div>
             </div>
             
             <!-- Windows Tab -->
             <div v-show="activeTab === 'windows'" class="tab-panel">
               <div class="code-block mb-md">
-                <code>powershell -c "irm https://gitarbor.com/install.ps1 | iex"</code>
+                <code>{{ commands.windows }}</code>
+                <button 
+                  class="copy-button" 
+                  @click="copyToClipboard(commands.windows)"
+                  :title="copiedCommand === commands.windows ? 'Copied!' : 'Copy to clipboard'"
+                >
+                  <span v-if="copiedCommand === commands.windows">Copied!</span>
+                  <span v-else>Copy</span>
+                </button>
               </div>
               <p class="text-muted mb-sm">Then run:</p>
               <div class="code-block">
-                <code>gitarbor</code>
+                <code>{{ commands.run }}</code>
+                <button 
+                  class="copy-button" 
+                  @click="copyToClipboard(commands.run)"
+                  :title="copiedCommand === commands.run ? 'Copied!' : 'Copy to clipboard'"
+                >
+                  <span v-if="copiedCommand === commands.run">Copied!</span>
+                  <span v-else>Copy</span>
+                </button>
               </div>
             </div>
           </div>
@@ -270,6 +302,25 @@
 import { ref } from 'vue'
 
 const activeTab = ref<'unix' | 'windows'>('unix')
+const copiedCommand = ref<string | null>(null)
+
+const commands = {
+  unix: 'curl -fsSL https://gitarbor.com/install.sh | bash',
+  windows: 'powershell -c "irm https://gitarbor.com/install.ps1 | iex"',
+  run: 'gitarbor'
+}
+
+async function copyToClipboard(text: string) {
+  try {
+    await navigator.clipboard.writeText(text)
+    copiedCommand.value = text
+    setTimeout(() => {
+      copiedCommand.value = null
+    }, 2000)
+  } catch (err) {
+    console.error('Failed to copy:', err)
+  }
+}
 
 useHead({
   title: 'GitArbor TUI - Next-Generation Git Client for Your Terminal',
@@ -419,6 +470,10 @@ useSeoMeta({
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
   overflow-x: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
 }
 
 .code-block code {
@@ -427,6 +482,29 @@ useSeoMeta({
   font-size: 0.95rem;
   white-space: pre;
   word-break: break-all;
+}
+
+.copy-button {
+  background: rgba(204, 136, 68, 0.2);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  color: var(--color-primary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-width: 70px;
+}
+
+.copy-button:hover {
+  background: rgba(204, 136, 68, 0.3);
+  transform: translateY(-1px);
+}
+
+.copy-button:active {
+  transform: translateY(0);
 }
 
 .features {
