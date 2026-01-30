@@ -15,7 +15,8 @@
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "lint": "oxlint --type-aware --type-check",
-    "lint:fix": "oxlint --fix"
+    "lint:fix": "oxlint --fix",
+    "changeset": "changeset"
   },
   "dependencies": {
     "@opentui/core": "^0.1.75",
@@ -23,6 +24,7 @@
     "react": "^19.2.4"
   },
   "devDependencies": {
+    "@lazy-release/changesets": "^0.5.1",
     "@types/archiver": "^7.0.0",
     "@types/bun": "1.3.7",
     "@types/react": "^19.2.10",
