@@ -77,3 +77,9 @@ Run GitArbor in any git repository:
 ```bash
 gitarbor
 ```
+
+## Alternatives
+
+If you find that GitArbor TUI doesn't quite satisfy your requirements, these may be a better fit:
+
+- [lazygit](https://github.com/jesseduffield/lazygit)
