@@ -1,5 +1,3 @@
 {
-  "ignorePatterns": [
-    "website/**",
-  ]
+  "ignorePatterns": ["website/**"]
 }
